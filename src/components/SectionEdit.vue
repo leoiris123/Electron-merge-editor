@@ -1,44 +1,77 @@
 <template>
   <div>
-    <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+    <el-tabs v-model="stateGroupName" type="card" @tab-click="handleClick">
       <el-tab-pane
         v-for="(item, index) in statesData"
         :key="index"
         :label="index"
         :name="index"
-        >
-        {{statesData[index]}}
+      >
+      <!-- :fit="true" -->
+        <!-- :row-class-name="tableRowClassName" -->
         <el-table
-          :data="statesData[index]"
-          style="width: 100%"
+          ref="edit"
           :row-class-name="tableRowClassName"
+          highlight-current-row
+          @current-change="handleCurrentChange"
+          
+          :border="true"
+          @row-click="handleRowClick"
+          @row-dblclick="handleDoubleClick"
+          :height="400"
+          show-overflow-tooltip
+          :header-cell-style="tableHeaderColor"
+          :data="item"
+          style="width: 100%"
         >
-        
-          <!-- <el-table-column prop="date" label="日期" width="180">
+          <el-table-column type="index" width="50"> </el-table-column>
+          <el-table-column prop="messageId" label="messageId" width="280">
           </el-table-column>
-          <el-table-column prop="name" label="姓名" width="180">
+          <el-table-column prop="choice" label="choice" width="280">
+            <template slot-scope="scope">
+              <el-popover trigger="hover" placement="top">
+                <div v-if="scope.row.choice">
+                  <p>text: {{ scope.row.choice?scope.row.choice[0].dialogID:"无" }}</p>
+                  <p>next: {{ scope.row.choice?scope.row.choice[0].nextState:"无" }}</p>
+                </div>
+
+                <div slot="reference" class="name-wrapper">
+                  <el-tag size="medium">{{
+                    scope.row.choice ? "分支" : "无分支"
+                  }}</el-tag>
+                </div>
+              </el-popover>
+            </template>
           </el-table-column>
-          <el-table-column prop="address" label="地址"> </el-table-column> -->
+          <!-- <el-table-column prop="nextStates" label="nextStates" width="100">
+          </el-table-column> -->
+          <!--
+          <el-table-column prop="address" label="地址"> </el-table-column>  -->
         </el-table>
       </el-tab-pane>
     </el-tabs>
+    <order-list> </order-list>
   </div>
 </template>
 
 <script>
 import event from "../../script/tool/event";
-import section from "../store/modules/section";
+// import section from "../store/modules/section";
+import OrderList from "../components/OrderList.vue";
 export default {
   name: "SectionEdit",
 
-  components: {},
+  components: {
+    OrderList,
+  },
 
   directives: {},
 
   data() {
     return {
       sectionName: null,
-      activeName: "first",
+      stateGroupName: "1",
+      activeIndex: 0,
       tableData: [
         {
           date: "2016-05-02",
@@ -84,13 +117,38 @@ export default {
     },
   },
   methods: {
-    tableRowClassName({ row, rowIndex }) {
-      if (rowIndex === 1) {
-        return "warning-row";
-      } else if (rowIndex === 3) {
-        return "success-row";
+    setCurrent(row) {
+      this.$refs.singleTable.setCurrentRow(row);
+    },
+    handleCurrentChange(val) {
+      //   console.log(val, "this.activeIndex = val");
+      if (val) {
+        this.activeIndex = val.row_index;
       }
-      return "";
+    },
+
+    handleDoubleClick(row, rowevent, column) {
+      let msg = {
+        sectionName:this.sectionName,
+        stateGroupName:this.stateGroupName,
+        index:row.row_index,
+        // messageId:row.messageId 
+      };
+      event.$emit("OpenOrderList", msg);
+      //   console.log(row, event, column, "DoubleClick==>row, event, column");
+    },
+    handleRowClick(row, event, column) {
+      console.log(row, this.activeIndex, "Click==>row,this.activeIndex");
+    },
+    tableHeaderColor({ row, column, rowIndex, columnIndex }) {
+      if (rowIndex === 0) {
+        return "background-color: #e3b4b8;color: #000000;height:2px;text-align:center;padding:0";
+      }
+    },
+    tableRowClassName({ row, rowIndex }) {
+      row.row_index = rowIndex;
+
+      //   console.log(row, rowIndex, "row,rowIndex");
     },
     selectNameChange(selectName) {
       if (!selectName) {
@@ -98,24 +156,28 @@ export default {
       }
       this.sectionName = selectName;
       //   console.log(this.sectionName,"this.sectionName")
-      console.log(Object.keys(this.statesData), "<==keys,");
-      console.log(Object.values(this.statesData), "<==values,");
+      //   console.log(Object.keys(this.statesData), "<==keys,");
+      //   console.log(Object.values(this.statesData), "<==values,");
 
       console.log(this.statesData, "statesData");
     },
+
     handleClick(tab, event) {
-      console.log(tab, event);
+      //   console.log(tab, event, "顶部选择");
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .el-table .warning-row {
-  background: oldlace;
+  background: rgb(185, 10, 39);
 }
 
 .el-table .success-row {
-  background: #f0f9eb;
+  background: #0ed5f0;
+}
+.el-table__body tr.current-row > td {
+  background-color: #aaa9a9;
 }
 </style>

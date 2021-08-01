@@ -53,7 +53,8 @@ export default {
   methods: {
     loadFile(rootPath) {
       loader.loadFile(rootPath, "conversation");
-      loader.loadXML(rootPath, "excelDialog");
+      // loader.loadXML(rootPath, "excelDialog");
+      loader.loadXML(rootPath, "dialogConfig");
       // loader.loadXML(rootPath,"aa") //测试用
     },
     importResource() {

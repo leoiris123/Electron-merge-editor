@@ -7,6 +7,7 @@ const fileList = {
 };
 const XMLList = {
   excelDialog: "/section-1/Dialog.xls",
+  dialogConfig:"/section-1/dialogConfig.xls",
   aa:"/section-1/aa.xlsx"
 };
 
@@ -29,7 +30,22 @@ export const loader = {
           total: list.length || 0,
         });
       });
-      store.dispatch("section/SET_DIALOG_LIST", result);
+      //对导入的excel数据进行整理
+      let list = result[0].list
+      let dialog = {}
+      list.map((item)=>{
+          if(item.property){
+              if(!dialog[item.property]){
+                dialog[item.property] = {}
+                dialog[item.property][item.id] = item
+              }else{
+                dialog[item.property][item.id] =item
+              }
+            
+          }
+      })
+      console.log(list,"list")
+      store.dispatch("section/SET_DIALOG_LIST", dialog);
    
     });
   },
