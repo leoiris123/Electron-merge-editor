@@ -31,8 +31,8 @@
             <template slot-scope="scope">
               <el-popover trigger="hover" placement="top">
                 <div v-if="scope.row.choice">
-                  <p>text: {{ scope.row.choice?scope.row.choice[0].dialogID:"无" }}</p>
-                  <p>next: {{ scope.row.choice?scope.row.choice[0].nextState:"无" }}</p>
+                  <p>text: {{ scope.row.choice?scope.row.choice[0].messageId:"无" }}</p>
+                  <p>next: {{ scope.row.choice?scope.row.choice[1].nextState:"无" }}</p>
                 </div>
 
                 <div slot="reference" class="name-wrapper">

@@ -8,7 +8,7 @@
         <el-button @click="exportResource" plain icon="el-icon-upload2"
           >导出</el-button
         >
-        <el-button plain icon="el-icon-folder-checked">保存</el-button>
+        <el-button @click="saveResource" plain icon="el-icon-folder-checked">保存</el-button>
         <el-button plain icon="el-icon-chat-line-round" @click="goDialogView"
           >对白库</el-button
         >
@@ -34,6 +34,7 @@ import BackBtn from "@/components/BackBtn.vue";
 import AsideList from "@/components/AsideList.vue";
 import SectionEdit from "@/components/SectionEdit";
 import { loader } from "../../script/load/load.js";
+import { exportutil } from "../../script/load/exportfile.js";
 const { dialog } = window.require("electron").remote;
 // const { dialog } = require('electron')
 export default {
@@ -52,6 +53,7 @@ export default {
   },
   methods: {
     loadFile(rootPath) {
+      localStorage.setItem("rootPath",rootPath)
       loader.loadFile(rootPath, "conversation");
       // loader.loadXML(rootPath, "excelDialog");
       loader.loadXML(rootPath, "dialogConfig");
@@ -96,6 +98,17 @@ export default {
     },
     exportResource() {
       console.log("=>导出资源");
+      let rootPath = localStorage.getItem("rootPath");
+      let sectionListAll = this.$store.getters["section/sectionListGet"];
+     let sectionDataStr =  JSON.stringify(sectionListAll)
+      exportutil.exportJSON(rootPath,"sectionData",sectionDataStr)
+    },
+      saveResource() {
+      console.log("=>保存资源");
+      let rootPath = localStorage.getItem("rootPath");
+      let sectionListAll = this.$store.getters["section/sectionListGet"];
+     let sectionDataStr =  JSON.stringify(sectionListAll)
+      exportutil.saveJSON(rootPath,"sectionData",sectionDataStr)
     },
     goDialogView() {
       console.log("=>进入对白");

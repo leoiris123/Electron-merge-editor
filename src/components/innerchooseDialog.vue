@@ -68,13 +68,12 @@ export default {
 
   data() {
     return {
-
       innerchooseDialogVisible: false,
       received: {},
       property: "", //所选择的类别名
       checkList: [], //右侧选中
-      addBranch:false,
-      nextState:null,
+      addBranch: false,
+      nextState: null,
       options: [
         {
           value: "选项1",
@@ -105,8 +104,8 @@ export default {
     event.$on("innerchooseDialog", (received) => {
       this.innerchooseDialogVisible = true;
       this.received = received;
-       this.addBranch = false
-       this.nextState =null
+      this.addBranch = false;
+      this.nextState = null;
       console.log(received, "received--");
     });
   },
@@ -144,34 +143,58 @@ export default {
         return;
       }
 
-      if(type=="add_branch"){
-          if(!this.addBranch){this.addBranch = true ;return}
-          
+      if (type == "add_branch") {
+        if (!this.addBranch) {
+          this.addBranch = true;
+          return;
+        }
 
-           let msgbranch= {};
-      Object.assign(msgbranch, {
-        type: type,
-        messageId: checkList[0], //后续增加多选功能
-        choice:[{
-            messageId:checkList[0],
-            nextState:this.nextState[0]
-        },{
-             messageId:checkList[1],
-            nextState:this.nextState[1]
-        }]
-      },this.received);
-      console.log(msgbranch,"msgbranch")
-      this.$store.dispatch('section/UPDATA_SECTION_LIST', msgbranch);
-      return
+        let msgbranch = {};
+        Object.assign(
+          msgbranch,
+          {
+            type: type,
+            messageId: checkList[0], //后续增加多选功能
+            choice: [
+              {
+                messageId: checkList[0],
+                nextState: this.nextState[0],
+              },
+              {
+                messageId: checkList[1],
+                nextState: this.nextState[1],
+              },
+            ],
+          },
+          this.received
+        );
+        console.log(msgbranch, "msgbranch");
+        this.$store.dispatch("section/UPDATA_SECTION_LIST", msgbranch);
+        this.$notify({
+          title: "成功",
+          message: "成功",
+          type: "success",
+          duration: 1100,
+        });
+        return;
       }
 
-      let msg= {};
-      Object.assign(msg, {
-        type: type,
-        messageId: checkList[0], //后续增加多选功能
-      },this.received);
-      console.log(msg,"msg")
-      this.$store.dispatch('section/UPDATA_SECTION_LIST', msg);
+      let msg = {};
+      Object.assign(
+        msg,
+        {
+          type: type,
+          messageId: checkList[0], //后续增加多选功能
+        },
+        this.received
+      );
+      this.$notify({
+        title: "成功",
+        message: "成功",
+        type: "success",
+        duration: 1100,
+      });
+      this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
     },
     handleNamechange() {
       this.checkList = [];
@@ -182,7 +205,7 @@ export default {
       console.log(this.messageList, "messageList--");
       console.log(this.checkList, "checkList--");
       console.log(this.received, "received--");
-       console.log(this.nextState, "nextState--");
+      console.log(this.nextState, "nextState--");
     },
   },
 };
