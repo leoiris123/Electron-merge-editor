@@ -10,12 +10,12 @@
       node-key="id"
       ref="aside"
     ></el-tree>
-    <el-row type = "flex" style="margin-top:10px">
-        <el-button @click="addSection" plain icon="el-icon-plus"
-          >新增场景</el-button>
-        <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
+    <el-row type="flex" style="margin-top:10px">
+      <el-button @click="addSection" plain icon="el-icon-plus"
+        >新增场景</el-button
+      >
+      <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
     </el-row>
-     
   </div>
 </template>
 
@@ -35,12 +35,20 @@ export default {
         label: "label",
       },
       selectName: "",
-      inputaddSection:""
+      inputaddSection: "",
     };
   },
 
-  mounted() {},
+  mounted() {
+    // console.log(this.textConfig,this.sectionList,"textConfig---sectionList---------++++++++++")
+  },
   computed: {
+    textConfig: {
+      get() {
+        let textConfig = this.$store.getters["configuration/textConfigGet"];
+        return textConfig;
+      },
+    },
     sectionList: {
       get() {
         let sectionListAll = this.$store.getters["section/sectionListGet"];
@@ -49,7 +57,8 @@ export default {
         Object.keys(sectionListAll).map((item, index) => {
           let temp = {
             id: index,
-            label: item,
+            label: this.textConfig[item] ? item + this.textConfig[item] : item,
+            sectionName: item,
           };
           sectionList.push(temp);
         });
@@ -59,33 +68,58 @@ export default {
       },
     },
   },
+  watch: {
+    textConfig(newval) {
+      let sectionListAll = this.$store.getters["section/sectionListGet"];
+      let lostsectionIDList = [];
+      Object.keys(newval).map((id) => {
+        if (!sectionListAll[id]) {
+          lostsectionIDList.push(id);
+        }
+      });
+      lostsectionIDList.map((id) => {
+        let msg = {
+          type: "add_section",
+          describe: id,
+        };
+        this.$store.dispatch("section/ADD_SECTION", msg);
+      });
+      console.log(lostsectionIDList, "找不到");
+    },
+  },
   methods: {
-    addSection(){
-      if(this.inputaddSection==false){
-        return
+    addSection() {
+      if (this.inputaddSection == false) {
+        return;
       }
 
-      let addsectionName =  this.inputaddSection
- 
+      let addsectionName = this.inputaddSection;
+
       let msg = {
-        type:"add_section",
-        describe:addsectionName
-      }
-      this.$store.dispatch('section/ADD_SECTION', msg);
-      this.$nextTick(()=>{
-           this.$forceUpdate();
+        type: "add_section",
+        describe: addsectionName,
+      };
+      this.$store.dispatch("section/ADD_SECTION", msg);
+      this.$nextTick(() => {
+        this.$forceUpdate();
       });
-   
     },
     handleNodeClick(data) {
-    //   console.log(data.label, "当前选择的selectName");
-      this.selectName = data.label;
+      let sectionListAll = this.$store.getters["section/sectionListGet"];
+      console.log(this.textConfig, "-textConfig");
+
+      console.log(
+        sectionListAll,
+        Object.keys(sectionListAll),
+        "-sectionListAll"
+      );
+      this.selectName = data.sectionName;
       event.$emit("selectNameChange", this.selectName);
       //   event.$on("countListObjChange", this.countListObjChange);
       //   let sectionListAll = this.$store.getters["section/sectionListGet"];
       //   let sectionName = Object.keys(sectionListAll);
       //   console.log(sectionListAll, "sectionListAll");
-    //   console.log(this.sectionList, "sectionList");
+      //   console.log(this.sectionList, "sectionList");
     },
   },
 };
@@ -96,7 +130,7 @@ export default {
   background-color: #f06060 !important;
 }
 .el-tree-node__label {
-    font-size: 14px; 
-    line-height: 14px;
+  font-size: 14px;
+  line-height: 14px;
 }
 </style>

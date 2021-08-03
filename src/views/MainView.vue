@@ -63,6 +63,7 @@ export default {
       //导入资源配置文件
       loader.loadFile(rootPath,"configuration")
       loader.loadXML(rootPath, "dialogConfig");
+      loader.loadXML(rootPath,"textConfig")
       // loader.loadXML(rootPath,"aa") //测试用
     },
     importResource() {

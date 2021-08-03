@@ -1,11 +1,12 @@
 const fs = window.require("fs");
 import XLSX from "xlsx";
 import store from "../../src/store";
+import {sorttool} from "../tool/sortData.js"
 const fileList = {
   mainQuest: {
       localPath:"/section-1/MainQuestStarters.json",
       storeScript:"section/SET_MAINQUEST"
-  },
+  },  
   conversation: {
     localPath:"/section-1/conversation.json",
     storeScript:"section/SET_SECTION_LIST"
@@ -24,6 +25,10 @@ const XMLList = {
   dialogConfig:{
     localPath:"/section-1/dialogConfig.xls",
     storeScript:"section/SET_DIALOG_LIST"
+  },
+  textConfig:{
+    localPath:"/section-1/textConfig.xlsx",
+    storeScript:"configuration/SET_TEXT_CONFIG" 
   }
 };
 
@@ -46,6 +51,12 @@ export const loader = {
           total: list.length || 0,
         });
       });
+      if(XMLname =="textConfig"){
+       let after =  sorttool.sortXML(result)
+       store.dispatch(XMLList[XMLname].storeScript, after);
+       console.log(result,after,"after---------**")
+        return
+      }
       //对导入的excel数据进行整理
       let list = result[0].list
       let dialog = {}
