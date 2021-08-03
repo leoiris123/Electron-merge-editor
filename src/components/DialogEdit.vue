@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="test">test</button>
+    <!-- <button @click="test">test</button> -->
     <el-collapse v-model="currentName" accordion @change="handleChange">
       <el-collapse-item
         v-for="(item, index) in selectGroupData"
@@ -11,9 +11,9 @@
           {{ item.txt }}<i class="header-icon el-icon-info"></i>
         </template>
         <div>
-          <el-tabs tab-position="top" type="card" style="height: 200px;">
+          <el-tabs tab-position="top" type="card" style="height: 300px;">
             <el-tab-pane label="立绘配置">
-              <el-tabs tab-position="left" style="height: 200px;">
+              <el-tabs tab-position="left" style="height:300px;">
                 <el-tab-pane
                   v-for="(character, index1) in characterList"
                   :key="index1"
@@ -38,32 +38,118 @@
                           :label="item"
                           :value="item"
                         >
-                        </el-option> 
-                        </el-select>
-                        </el-col>
+                        </el-option>
+                      </el-select>
+                    </el-col>
                   </el-row>
-
-                   <el-row>
-                    <el-col>选择皮肤：
+                  <!-- 选择皮肤： -->
+                  <el-row
+                    v-if="
+                      dialogEditList[item.id][character].char == ''
+                        ? false
+                        : true
+                    "
+                  >
+                    <el-col
+                      >选择皮肤：
                       <el-select
-                      v-if="dialogEditList[item.id][character].char==''?true:false"
-                        v-model="dialogEditList[item.id][character].char"
+                        v-if="
+                          dialogEditList[item.id][character].char == ''
+                            ? false
+                            : true
+                        "
+                        v-model="dialogEditList[item.id][character].emotion"
                         @change="handleSelectChange"
                         filterable
                         clearable
                         placeholder="请选择"
                       >
-                        <!-- <el-option
-                        :disabled="dialogEditList[item.id][character].char==''?true:false"
-                          v-for="item in configuration[dialogEditList[item.id][character].char].skin.default"
-                          :key="item"
-                          :label="item"
-                          :value="item"
-                        >
-                        </el-option>  -->
-                        </el-select
-                    >
-
+                        <!-- configuration[dialogEditList[item.id][character].char].skin.default -->
+                        <!-- :disabled="dialogEditList[item.id][character].char==''?true:false" -->
+                        <div>
+                          <el-option
+                            v-for="item in dialogEditList[item.id]
+                              ? configuration[
+                                  dialogEditList[item.id][character].char
+                                ].skin.default
+                              : null"
+                            :key="item"
+                            :label="item"
+                            :value="item"
+                          >
+                          </el-option>
+                        </div>
+                      </el-select>
+                    </el-col>
+                  </el-row>
+                  <!-- 选择音效 -->
+                  <el-row
+                    v-if="
+                      dialogEditList[item.id][character].char == ''
+                        ? false
+                        : true
+                    "
+                  >
+                    <el-col
+                      >选择音效：
+                      <el-select
+                        v-if="
+                          dialogEditList[item.id][character].char == ''
+                            ? false
+                            : true
+                        "
+                        v-model="dialogEditList[item.id][character].audio"
+                        @change="handleSelectChange"
+                        filterable
+                        clearable
+                        placeholder="请选择"
+                      >
+                        <!-- configuration[dialogEditList[item.id][character].char].skin.default -->
+                        <!-- :disabled="dialogEditList[item.id][character].char==''?true:false" -->
+                        <div>
+                          <el-option
+                            v-for="item in dialogEditList[item.id]
+                              ? configuration[
+                                  dialogEditList[item.id][character].char
+                                ].audios
+                              : null"
+                            :key="item"
+                            :label="item"
+                            :value="item"
+                          >
+                          </el-option>
+                        </div>
+                      </el-select>
+                    </el-col>
+                  </el-row>
+                  <!-- 选择为主 -->
+                  <el-row>
+                    <el-col>
+                      <el-checkbox
+                        @change="handleSelectChange"
+                        v-if="
+                          dialogEditList[item.id][character].char == ''
+                            ? false
+                            : true
+                        "
+                        v-model="dialogEditList[item.id][character].isMain"
+                        >选择为主</el-checkbox
+                      >
+                    </el-col>
+                  </el-row>
+                  <!-- 显示名字-->
+                  <el-row>
+                    <el-col>
+                      <el-checkbox
+                        @change="handleSelectChange"
+                        v-if="
+                          dialogEditList[item.id][character].char == ''
+                            ? false
+                            : true
+                        "
+                        v-model="dialogEditList[item.id][character].showName"
+                        >显示名字</el-checkbox
+                      >
                     </el-col>
                   </el-row>
                 </el-tab-pane>
@@ -71,8 +157,19 @@
               <input type="text" />
             </el-tab-pane>
 
-            <el-tab-pane label="敬请期待">
-              这里啥都没有 ID:{{ item.id }}
+            <el-tab-pane label="其他配置">
+              <!-- 这里啥都没有 ID:{{ item.id }} -->
+              <!-- 屏幕震动 -->
+              <el-row>
+                <el-col>
+                  <el-checkbox
+                    @change="handleSelectChange"
+                    v-if="dialogEditList[item.id] == '' ? false : true"
+                    v-model="dialogEditList[item.id].shake"
+                    >屏幕震动</el-checkbox
+                  >
+                </el-col>
+              </el-row>
             </el-tab-pane>
           </el-tabs>
         </div>

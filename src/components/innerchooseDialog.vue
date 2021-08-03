@@ -137,7 +137,7 @@ export default {
   methods: {
     handleConfirm(type) {
       let checkList = this.checkList;
-      if (this.checkList.length < 1) {
+      if (this.checkList.length < 1 && type!=="delete_normal") {
         // this.innerchooseDialogVisible = false;
         console.warn("选择失败");
         return;

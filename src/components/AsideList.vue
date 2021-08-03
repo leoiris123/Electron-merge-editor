@@ -10,6 +10,12 @@
       node-key="id"
       ref="aside"
     ></el-tree>
+    <el-row type = "flex" style="margin-top:10px">
+        <el-button @click="addSection" plain icon="el-icon-plus"
+          >新增场景</el-button>
+        <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
+    </el-row>
+     
   </div>
 </template>
 
@@ -29,6 +35,7 @@ export default {
         label: "label",
       },
       selectName: "",
+      inputaddSection:""
     };
   },
 
@@ -53,6 +60,23 @@ export default {
     },
   },
   methods: {
+    addSection(){
+      if(this.inputaddSection==false){
+        return
+      }
+
+      let addsectionName =  this.inputaddSection
+ 
+      let msg = {
+        type:"add_section",
+        describe:addsectionName
+      }
+      this.$store.dispatch('section/ADD_SECTION', msg);
+      this.$nextTick(()=>{
+           this.$forceUpdate();
+      });
+   
+    },
     handleNodeClick(data) {
     //   console.log(data.label, "当前选择的selectName");
       this.selectName = data.label;

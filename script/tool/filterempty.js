@@ -8,5 +8,17 @@ export const filtertool = {
                 }
             }) 
         }
+    },
+    filterindex(data){
+        for(let key in data){
+            for(let key2 in data[key].states){
+                data[key].states[key2].map(item=>{
+                    if(!(item.row_index==null)){
+                        delete item.row_index
+                    }
+                })
+            }
+
+        }
     }
 }

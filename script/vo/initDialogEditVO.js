@@ -16,22 +16,30 @@ class initDialogEditVO {
        this.shake = false
         this.left1={
             char: "",
+            audio:"",
             emotion: "",
+            showName:false,
             isMain: false
         }
         this.left2={
             char: "",
             emotion: "",
+            audio:"",
+            showName:false,
             isMain: false
         }
         this.right1={
             char: "",
             emotion: "",
+            audio:"",
+            showName:false,
             isMain: false
         }
         this.right2={
             char: "",
             emotion: "",
+            audio:"",
+            showName:false,
             isMain: false
         }
        

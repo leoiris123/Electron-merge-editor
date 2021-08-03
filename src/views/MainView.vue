@@ -108,7 +108,7 @@ export default {
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       let sectionDataStr = JSON.stringify(sectionListAll);
       exportutil.exportJSON(rootPath, "sectionData", sectionDataStr);
-
+      filtertool.filterindex(sectionListAll)
       let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
          filtertool.filterempty(dialogEditListAll)
       let dialogEditListStr = JSON.stringify(dialogEditListAll);
@@ -118,7 +118,7 @@ export default {
       console.log("=>保存资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-     
+     filtertool.filterindex(sectionListAll)
       let sectionDataStr = JSON.stringify(sectionListAll);
       exportutil.saveJSON(rootPath, "sectionData", sectionDataStr);
       
@@ -154,7 +154,7 @@ export default {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
-  line-height: 300px;
+  line-height: 20px
 }
 
 .el-main {

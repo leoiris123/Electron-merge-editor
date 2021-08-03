@@ -7,14 +7,13 @@
         :label="index"
         :name="index"
       >
-      <!-- :fit="true" -->
+        <!-- :fit="true" -->
         <!-- :row-class-name="tableRowClassName" -->
         <el-table
           ref="edit"
           :row-class-name="tableRowClassName"
           highlight-current-row
           @current-change="handleCurrentChange"
-          
           :border="true"
           @row-click="handleRowClick"
           @row-dblclick="handleDoubleClick"
@@ -27,15 +26,32 @@
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column prop="messageId" label="messageId" width="280">
             <template slot-scope="scope">
-             <div>{{dialogListArrange[scope.row.messageId]?dialogListArrange[scope.row.messageId].txt:scope.row.messageId}}</div>
+              <div>
+                {{
+                  dialogListArrange[scope.row.messageId]
+                    ? dialogListArrange[scope.row.messageId].txt
+                    : scope.row.messageId
+                }}
+              </div>
             </template>
           </el-table-column>
           <el-table-column prop="choice" label="choice" width="280">
             <template slot-scope="scope">
-              <el-popover v-if="scope.row.choice" trigger="hover" placement="top">
-                <div v-for="(item,index) in scope.row.choice" :key="index" >
-                  <p>text: {{ item&&dialogListArrange[item.messageId]?dialogListArrange[item.messageId].txt:"无" }}</p>
-                  <p>next: {{ item?item.nextState:"无" }}</p>
+              <el-popover
+                v-if="scope.row.choice"
+                trigger="hover"
+                placement="top"
+              >
+                <div v-for="(item, index) in scope.row.choice" :key="index">
+                  <p>
+                    text:
+                    {{
+                      item && dialogListArrange[item.messageId]
+                        ? dialogListArrange[item.messageId].txt
+                        : "无"
+                    }}
+                  </p>
+                  <p>next: {{ item ? item.nextState : "无" }}</p>
                 </div>
 
                 <div slot="reference" class="name-wrapper">
@@ -52,6 +68,17 @@
           <el-table-column prop="address" label="地址"> </el-table-column>  -->
         </el-table>
       </el-tab-pane>
+      <el-row>
+        <el-row type="flex" style="margin-top:10px">
+          <el-button @click="addstate" plain icon="el-icon-plus"
+            >新增对话列表</el-button
+          >
+          <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
+          <el-button @click="adddialog" plain icon="el-icon-plus"
+            >初始化对话列表</el-button
+          >
+        </el-row>
+      </el-row>
     </el-tabs>
     <order-list> </order-list>
   </div>
@@ -74,7 +101,10 @@ export default {
     return {
       sectionName: null,
       stateGroupName: "1",
+
       activeIndex: 0,
+      inputaddstate: "",
+      inputadddialog: "",
       tableData: [
         {
           date: "2016-05-02",
@@ -118,15 +148,43 @@ export default {
         }
       },
     },
-    dialogListArrange:{
-        get(){
-            let dialogListArrange = this.$store.getters["section/dialogListArrangeGet"]
-            return dialogListArrange
-        }
-    }
-
+    dialogListArrange: {
+      get() {
+        let dialogListArrange = this.$store.getters[
+          "section/dialogListArrangeGet"
+        ];
+        return dialogListArrange;
+      },
+    },
   },
   methods: {
+    adddialog() {
+      console.log(this.stateGroupName, "this.stateGroupName");
+      let sectionName = this.sectionName;
+      let selectStateName = this.stateGroupName;
+      if (sectionName && selectStateName) {
+        let msg = {
+          type: "init_dialog",
+          sectionName: sectionName,
+          selectStateName: selectStateName,
+        };
+
+        this.$store.dispatch("section/ADD_SECTION", msg);
+      }
+      console.log(sectionName, selectStateName, "**");
+    },
+    addstate() {
+      let inputaddstate = this.inputaddstate;
+      let sectionName = this.sectionName;
+      if (inputaddstate && sectionName) {
+        let msg = {
+          type: "add_state",
+          sectionName: sectionName,
+          stateName: inputaddstate,
+        };
+        this.$store.dispatch("section/ADD_SECTION", msg);
+      }
+    },
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
     },
@@ -139,10 +197,10 @@ export default {
 
     handleDoubleClick(row, rowevent, column) {
       let msg = {
-        sectionName:this.sectionName,
-        stateGroupName:this.stateGroupName,
-        index:row.row_index,
-        // messageId:row.messageId 
+        sectionName: this.sectionName,
+        stateGroupName: this.stateGroupName,
+        index: row.row_index,
+        // messageId:row.messageId
       };
       event.$emit("OpenOrderList", msg);
       //   console.log(row, event, column, "DoubleClick==>row, event, column");

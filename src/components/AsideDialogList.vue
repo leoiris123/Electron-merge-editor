@@ -9,7 +9,7 @@
       node-key="id"
       ref="aside_dialog"
     ></el-tree>
-    <button @click="test">test</button>
+    <!-- <button @click="test">test</button> -->
   </div>
 </template>
 
