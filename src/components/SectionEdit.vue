@@ -26,13 +26,16 @@
         >
           <el-table-column type="index" width="50"> </el-table-column>
           <el-table-column prop="messageId" label="messageId" width="280">
+            <template slot-scope="scope">
+             <div>{{dialogListArrange[scope.row.messageId]?dialogListArrange[scope.row.messageId].txt:scope.row.messageId}}</div>
+            </template>
           </el-table-column>
           <el-table-column prop="choice" label="choice" width="280">
             <template slot-scope="scope">
-              <el-popover trigger="hover" placement="top">
-                <div v-if="scope.row.choice">
-                  <p>text: {{ scope.row.choice?scope.row.choice[0].messageId:"无" }}</p>
-                  <p>next: {{ scope.row.choice?scope.row.choice[1].nextState:"无" }}</p>
+              <el-popover v-if="scope.row.choice" trigger="hover" placement="top">
+                <div v-for="(item,index) in scope.row.choice" :key="index" >
+                  <p>text: {{ item&&dialogListArrange[item.messageId]?dialogListArrange[item.messageId].txt:"无" }}</p>
+                  <p>next: {{ item?item.nextState:"无" }}</p>
                 </div>
 
                 <div slot="reference" class="name-wrapper">
@@ -115,6 +118,13 @@ export default {
         }
       },
     },
+    dialogListArrange:{
+        get(){
+            let dialogListArrange = this.$store.getters["section/dialogListArrangeGet"]
+            return dialogListArrange
+        }
+    }
+
   },
   methods: {
     setCurrent(row) {
@@ -178,6 +188,6 @@ export default {
   background: #0ed5f0;
 }
 .el-table__body tr.current-row > td {
-  background-color: #aaa9a9;
+  background-color: #a39696;
 }
 </style>

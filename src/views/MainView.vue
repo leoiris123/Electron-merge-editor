@@ -8,7 +8,9 @@
         <el-button @click="exportResource" plain icon="el-icon-upload2"
           >导出</el-button
         >
-        <el-button @click="saveResource" plain icon="el-icon-folder-checked">保存</el-button>
+        <el-button @click="saveResource" plain icon="el-icon-folder-checked"
+          >保存</el-button
+        >
         <el-button plain icon="el-icon-chat-line-round" @click="goDialogView"
           >对白库</el-button
         >
@@ -36,6 +38,7 @@ import SectionEdit from "@/components/SectionEdit";
 import { loader } from "../../script/load/load.js";
 import { exportutil } from "../../script/load/exportfile.js";
 const { dialog } = window.require("electron").remote;
+import {filtertool} from "../../script/tool/filterempty"
 // const { dialog } = require('electron')
 export default {
   name: "MainView",
@@ -44,7 +47,6 @@ export default {
     BackBtn,
     AsideList,
     SectionEdit,
-    
   },
   data() {
     return {
@@ -53,9 +55,13 @@ export default {
   },
   methods: {
     loadFile(rootPath) {
-      localStorage.setItem("rootPath",rootPath)
+      localStorage.setItem("rootPath", rootPath);
+      //导入维护的文件
       loader.loadFile(rootPath, "conversation");
+      loader.loadFile(rootPath, "dialogEditData");
       // loader.loadXML(rootPath, "excelDialog");
+      //导入资源配置文件
+      loader.loadFile(rootPath,"configuration")
       loader.loadXML(rootPath, "dialogConfig");
       // loader.loadXML(rootPath,"aa") //测试用
     },
@@ -100,15 +106,26 @@ export default {
       console.log("=>导出资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-     let sectionDataStr =  JSON.stringify(sectionListAll)
-      exportutil.exportJSON(rootPath,"sectionData",sectionDataStr)
+      let sectionDataStr = JSON.stringify(sectionListAll);
+      exportutil.exportJSON(rootPath, "sectionData", sectionDataStr);
+
+      let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
+         filtertool.filterempty(dialogEditListAll)
+      let dialogEditListStr = JSON.stringify(dialogEditListAll);
+      exportutil.exportJSON(rootPath, "dialogEditList", dialogEditListStr);
     },
-      saveResource() {
+    saveResource() {
       console.log("=>保存资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-     let sectionDataStr =  JSON.stringify(sectionListAll)
-      exportutil.saveJSON(rootPath,"sectionData",sectionDataStr)
+     
+      let sectionDataStr = JSON.stringify(sectionListAll);
+      exportutil.saveJSON(rootPath, "sectionData", sectionDataStr);
+      
+      let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
+       filtertool.filterempty(dialogEditListAll)
+      let dialogEditListStr = JSON.stringify(dialogEditListAll);
+      exportutil.saveJSON(rootPath, "dialogEditList", dialogEditListStr);
     },
     goDialogView() {
       console.log("=>进入对白");

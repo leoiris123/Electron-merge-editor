@@ -2,20 +2,36 @@ const fs = window.require("fs");
 import XLSX from "xlsx";
 import store from "../../src/store";
 const fileList = {
-  mainQuest: "/section-1/MainQuestStarters.json",
-  conversation: "/section-1/conversation.json",
+  mainQuest: {
+      localPath:"/section-1/MainQuestStarters.json",
+      storeScript:"section/SET_MAINQUEST"
+  },
+  conversation: {
+    localPath:"/section-1/conversation.json",
+    storeScript:"section/SET_SECTION_LIST"
+  },
+  dialogEditData:{
+    localPath:"/section-1/dialogEditData.json",
+    storeScript:"section/SET_DIALOG_EDIT_LIST"
+  },
+  configuration:{
+    localPath:"/section-1/DialogCharacterConfigs.json",
+    storeScript:"configuration/SET_CONFIGURATION" 
+  }
 };
 const XMLList = {
-  excelDialog: "/section-1/Dialog.xls",
-  dialogConfig:"/section-1/dialogConfig.xls",
-  aa:"/section-1/aa.xlsx"
+//   excelDialog: "/section-1/Dialog.xls",
+  dialogConfig:{
+    localPath:"/section-1/dialogConfig.xls",
+    storeScript:"section/SET_DIALOG_LIST"
+  }
 };
 
 export const loader = {
   // 加载XML文件
   loadXML(rootpath, XMLname) {
     console.log("==>XMLname", XMLname);
-    fs.readFile(rootpath + XMLList[XMLname], (err, data) => {
+    fs.readFile(rootpath + XMLList[XMLname].localPath, (err, data) => {
       if (err) {
         console.log("err", err);
       }
@@ -45,7 +61,7 @@ export const loader = {
           }
       })
       console.log(list,"list")
-      store.dispatch("section/SET_DIALOG_LIST", dialog);
+      store.dispatch(XMLList[XMLname].storeScript, dialog);
    
     });
   },
@@ -53,11 +69,11 @@ export const loader = {
   loadFile(rootpath, filename) {
     console.log("==>rootpath,", rootpath);
     console.log("==>filename", filename);
-    fs.readFile(rootpath + fileList[filename], "utf-8", (err, data) => {
+    fs.readFile(rootpath + fileList[filename].localPath, "utf-8", (err, data) => {
       if (err) {
         console.warn("err", err);
       } else {
-        store.dispatch("section/SET_SECTION_LIST", JSON.parse(data));
+        store.dispatch(fileList[filename].storeScript, JSON.parse(data));
       }
     });
   },

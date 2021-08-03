@@ -2,10 +2,12 @@ const fs = window.require("fs");
 const path = require("path");
 import event from "../tool/event";
 const exportPath = {
-  sectionData: "/section-1/conversation.json",
+  sectionData: "/exportData/exportSection.json",
+  dialogEditList: "/exportData/exportDialoglib.json",
 };
 const savePath = {
-    sectionData: "/save-temp-data/sectionTemp.json",
+    sectionData: "/section-1/conversation.json",
+    dialogEditList:"/section-1/dialogEditData.json"
   };
 export const exportutil = {
 
