@@ -41,23 +41,47 @@ export default {
       },
       selectName: "",
       inputaddSection: "",
+      sectionListAllUpdata : this.$store.getters["section/sectionListGet"],
+      sectionListTemp:[]
     };
   },
 
   mounted() {
+    event.$on("sectionChange",(val)=>{
+       this.sectionListAll = val
+    })
     // console.log(this.textConfig,this.sectionList,"textConfig---sectionList---------++++++++++")
   },
   computed: {
+  
     textConfig: {
       get() {
         let textConfig = this.$store.getters["configuration/textConfigGet"];
         return textConfig;
       },
     },
-    sectionList: {
-      get() {
-        let sectionListAll = this.$store.getters["section/sectionListGet"];
-
+    sectionListAll:{
+      get(){
+        return this.$store.getters["section/sectionListGet"]
+      },
+      set(val){
+        let sectionListAll = val;
+        let sectionList = [];
+        Object.keys(sectionListAll).map((item, index) => {
+          let temp = {
+            id: index,
+            label: this.textConfig[item] ? item + this.textConfig[item] : item,
+            sectionName: item,
+          };
+          sectionList.push(temp);
+        });
+        this.sectionListTemp = sectionList
+      }
+    },
+    sectionList:{
+      get(){
+         
+        let sectionListAll = this.sectionListAll;
         let sectionList = [];
         Object.keys(sectionListAll).map((item, index) => {
           let temp = {
@@ -69,11 +93,21 @@ export default {
         });
         console.log(sectionListAll, "sectionListAll");
         console.log(sectionList, "sectionList");
-        return sectionList;
+        // this.sectionList = sectionList
+        // if(this.sectionListTemp == sectionList  ){
+        //   return this.sectionListTemp
+        // }
+        //缓存
+        return this.sectionListTemp.length>0?this.sectionListTemp:sectionList
       },
+      set(){
+
+      }
     },
+   
   },
   watch: {
+  
     textConfig(newval) {
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       let lostsectionIDList = [];
@@ -91,15 +125,33 @@ export default {
       });
       console.log(lostsectionIDList, "找不到");
     },
-    selectName(){
-         this.$forceUpdate();
+    sectionListAllUpdata(){
+        console.log("this.$forceUpdate();")
+       
     }
   },
   methods: {
+
+    restoreData(){
+      let sectionListAll = this.sectionListAll;
+
+        let sectionList = [];
+        Object.keys(sectionListAll).map((item, index) => {
+          let temp = {
+            id: index,
+            label: this.textConfig[item] ? item + this.textConfig[item] : item,
+            sectionName: item,
+          };
+          sectionList.push(temp);
+        });
+        console.log(sectionListAll, "sectionListAll");
+        console.log(sectionList, "sectionList");
+        return sectionList;
+    },
+
     deleteSection(){
       console.log(this.selectName,"this.selectName")
       if(!this.selectName){
-         console.log( "*******************");
         return
       }
       let msg={
@@ -133,11 +185,6 @@ export default {
       );
       this.selectName = data.sectionName;
       event.$emit("selectNameChange", this.selectName);
-      //   event.$on("countListObjChange", this.countListObjChange);
-      //   let sectionListAll = this.$store.getters["section/sectionListGet"];
-      //   let sectionName = Object.keys(sectionListAll);
-      //   console.log(sectionListAll, "sectionListAll");
-      //   console.log(this.sectionList, "sectionList");
     },
   },
 };

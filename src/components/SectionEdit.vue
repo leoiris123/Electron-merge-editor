@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="sectionEdit">
     <el-tabs v-model="stateGroupName" type="card" @tab-click="handleClick">
       <el-tab-pane
         v-for="(item, index) in statesData"
@@ -17,14 +17,15 @@
           :border="true"
           @row-click="handleRowClick"
           @row-dblclick="handleDoubleClick"
-          :height="400"
+          height="560"
+          
           show-overflow-tooltip
           :header-cell-style="tableHeaderColor"
           :data="item"
           style="width: 100%"
         >
           <el-table-column type="index" width="50"> </el-table-column>
-          <el-table-column prop="messageId" label="messageId" width="280">
+          <el-table-column prop="messageId" label="messageId" width="740">
             <template slot-scope="scope">
               <div>
                 {{
@@ -35,39 +36,40 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column label="choice" width="280">
+          <el-table-column label="choice" width="200">
             <template slot-scope="scope">
-              <!-- 分支语句判断 -->
-              <el-popover
-                v-if="scope.row.choice"
-                trigger="hover"
-                placement="top"
-              >
-                <div v-for="(item, index) in scope.row.choice" :key="index">
-                  <p>
-                    text:
-                    {{
-                      item && dialogListArrange[item.messageId]
-                        ? dialogListArrange[item.messageId].txt
-                        : "无"
-                    }}
-                  </p>
-                  <p>next: {{ item ? item.nextState : "无" }}</p>
-                </div>
+              <el-row type="flex">
+                <!-- 分支语句判断 -->
+                <el-popover
+                  v-if="scope.row.choice"
+                  trigger="hover"
+                  placement="top"
+                >
+                  <div v-for="(item, index) in scope.row.choice" :key="index">
+                    <p>
+                      text:
+                      {{
+                        item && dialogListArrange[item.messageId]
+                          ? dialogListArrange[item.messageId].txt
+                          : "无"
+                      }}
+                    </p>
+                    <p>next: {{ item ? item.nextState : "无" }}</p>
+                  </div>
 
-                <div slot="reference" class="name-wrapper">
+                  <div slot="reference" class="name-wrapper">
+                    <el-tag size="medium">{{
+                      scope.row.choice ? "分支" : "无分支"
+                    }}</el-tag>
+                  </div>
+                </el-popover>
+                <!-- 结束语句判断 -->
+                <div class="name-wrapper" v-if="scope.row.next">
                   <el-tag size="medium">{{
-                    scope.row.choice ? "分支" : "无分支"
+                    scope.row.next ? "next:" + scope.row.next : ""
                   }}</el-tag>
-                </div>
-              </el-popover>
-              <!-- 结束语句判断 -->
- 
-              <div class="name-wrapper" v-if="scope.row.end">
-                <el-tag size="medium">{{
-                  scope.row.end ? "结束语" : ""
-                }}</el-tag>
-              </div>
+                </div></el-row
+              >
             </template>
           </el-table-column>
           <!-- <el-table-column prop="nextStates" label="nextStates" width="100">
@@ -76,18 +78,22 @@
           <el-table-column prop="address" label="地址"> </el-table-column>  -->
         </el-table>
       </el-tab-pane>
-      <el-row>
+    
+    </el-tabs>
+      <el-row style="position:absolute;bottom:5px">
         <el-row type="flex" style="margin-top:10px">
           <el-button @click="addstate" plain icon="el-icon-plus"
             >新增对话列表</el-button
           >
           <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
-          <el-button @click="adddialog" plain icon="el-icon-plus"
+          <el-button @click="initdialog" plain icon="el-icon-plus"
             >初始化对话列表</el-button
+          >
+          <el-button @click="deletedialog" plain icon="el-icon-delete-solid"
+            >删除对话列表</el-button
           >
         </el-row>
       </el-row>
-    </el-tabs>
     <order-list> </order-list>
   </div>
 </template>
@@ -109,7 +115,7 @@ export default {
     return {
       sectionName: null,
       stateGroupName: "1",
-
+      // statesData:{},
       activeIndex: 0,
       inputaddstate: "",
       inputadddialog: "",
@@ -140,8 +146,30 @@ export default {
 
   mounted() {
     event.$on("selectNameChange", this.selectNameChange);
+    event.$on("sectionChange", (val) => {
+      this.sectionListAll = val;
+    });
   },
   computed: {
+    sectionListAll: {
+      get() {
+        return this.$store.getters["section/sectionListGet"];
+      },
+      set(val) {
+        console.log("*/**/********");
+
+        //     let statesData = val;
+        // if (!this.sectionName) {
+        //   return {};
+        // }
+        // if (statesData[this.sectionName]) {
+        //   //   console.log(statesData[this.sectionName].states,"statesData[this.sectionName].states")
+        //   return statesData[this.sectionName].states;
+        // } else {
+        //   return {};
+        // }
+      },
+    },
     statesData: {
       get() {
         let statesData = this.$store.getters["section/sectionListGet"];
@@ -165,8 +193,23 @@ export default {
       },
     },
   },
+
   methods: {
-    adddialog() {
+    deletedialog() {
+      console.log(this.stateGroupName, "this.stateGroupName");
+      let sectionName = this.sectionName;
+      let selectStateName = this.stateGroupName;
+      if (sectionName && selectStateName) {
+        let msg = {
+          type: "delete_state",
+          sectionName: sectionName,
+          selectStateName: selectStateName,
+        };
+
+        this.$store.dispatch("section/UPDATA_SECTION", msg);
+      }
+    },
+    initdialog() {
       console.log(this.stateGroupName, "this.stateGroupName");
       let sectionName = this.sectionName;
       let selectStateName = this.stateGroupName;
@@ -197,7 +240,6 @@ export default {
       this.$refs.singleTable.setCurrentRow(row);
     },
     handleCurrentChange(val) {
-      //   console.log(val, "this.activeIndex = val");
       if (val) {
         this.activeIndex = val.row_index;
       }
@@ -246,6 +288,10 @@ export default {
 </script>
 
 <style lang="scss">
+.sectionEdit{
+  height: 100%;
+  width: 100%;
+}
 .el-table .warning-row {
   background: rgb(185, 10, 39);
 }

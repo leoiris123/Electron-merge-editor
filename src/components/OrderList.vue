@@ -4,8 +4,9 @@
       title="命令列表"
       :visible.sync="dialogVisible"
       width="50%"
-      :before-close="handleClose"
+     
     >
+    <!--  :before-close="handleClose" -->
       <el-row :gutter="10" style="padding-bottom: 20px;">
         <el-col :span="4.5">
           <el-button @click="gotoOrderItem('chooseDialog')" type="primary" round

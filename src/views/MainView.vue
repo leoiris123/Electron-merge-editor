@@ -107,9 +107,10 @@ export default {
       console.log("=>导出资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
+      filtertool.filterindex(sectionListAll)
       let sectionDataStr = JSON.stringify(sectionListAll);
       exportutil.exportJSON(rootPath, "sectionData", sectionDataStr);
-      filtertool.filterindex(sectionListAll)
+   
       let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
          filtertool.filterempty(dialogEditListAll)
       let dialogEditListStr = JSON.stringify(dialogEditListAll);

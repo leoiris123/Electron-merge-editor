@@ -49,11 +49,11 @@
         <el-button type="danger" @click="handleConfirm('add_branch')"
           >新增分支</el-button
         >
-        <el-button type="danger" @click="handleConfirm('add_end_branch')"
-          >新增结束</el-button
+        <el-button type="danger" @click="handleConfirm('add_next')"
+          >新增next</el-button
         >
-        <el-button type="danger" @click="handleConfirm('delete_end_branch')"
-          >删除结束</el-button
+        <el-button type="danger" @click="handleConfirm('delete_next')"
+          >删除next</el-button
         >
       </el-row>
 
@@ -150,7 +150,10 @@ export default {
   methods: {
     handleConfirm(type) {
       let checkList = this.checkList;
-      if (this.checkList.length < 1 && (type == "add_normal" || type == "modify_normal")) {
+      if (
+        this.checkList.length < 1 &&
+        (type == "add_normal" || type == "modify_normal")
+      ) {
         // this.innerchooseDialogVisible = false;
         console.warn("选择失败");
         return;
@@ -161,7 +164,9 @@ export default {
           this.addBranch = true;
           return;
         }
-
+        if (!this.nextState.length == 2) {
+          return;
+        }
         let msgbranch = {};
         Object.assign(
           msgbranch,
@@ -184,14 +189,40 @@ export default {
         console.log(msgbranch, "msgbranch");
         this.$store.dispatch("section/UPDATA_SECTION_LIST", msgbranch);
         this.$notify({
-          title: "成功",
+          title: "分支设置成功",
           message: "成功",
           type: "success",
           duration: 1100,
         });
         return;
       }
-
+      if (type == "add_next") {
+        if (!this.addBranch) {
+          this.addBranch = true;
+          return;
+        }
+        if (!this.nextState.length == 1) {
+          return;
+        }
+        let msg = {};
+        Object.assign(
+          msg,
+          {
+            type: type,
+            next: this.nextState[0],
+            messageId: checkList[0], //后续增加多选功能
+          },
+          this.received
+        );
+        this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
+        this.$notify({
+        title: "next设置成功",
+        message: "成功",
+        type: "success",
+        duration: 1100,
+      });
+        return
+      }
       let msg = {};
       Object.assign(
         msg,

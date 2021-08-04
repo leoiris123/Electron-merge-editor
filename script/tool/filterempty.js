@@ -20,5 +20,6 @@ export const filtertool = {
             }
 
         }
+        console.log(data,"after")
     }
 }
