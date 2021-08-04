@@ -4,7 +4,7 @@ const  SET_DIALOG_EDIT_LIST = "set_dialog_edit_list" //配置对白数据
 
 const UPDATA_SECTION_LIST = "updata_section_list";
 const UPDATA_DIALOG_LIST = "updata_dialog_list";
-const ADD_SECTION = "add_section"
+const UPDATA_SECTION = "updata_section"
 const state = {
   sectionList: {}, //场景列表数据
   dialogList: {}, // 对话分组数据
@@ -80,6 +80,16 @@ const mutations = {
           ]["choice"] = data.choice
           console.log( state.sectionList[data.sectionName].states[data.stateGroupName], " state.sectionList[data.sectionName].states[data.stateGroupName]");
     }
+    if(data.type == "add_end_branch"){
+      state.sectionList[data.sectionName].states[data.stateGroupName][
+        data.index
+      ]["end"] = true
+    }
+    if(data.type == "delete_end_branch"){
+      state.sectionList[data.sectionName].states[data.stateGroupName][
+        data.index
+      ]["end"] = false
+    }
     console.log(data, "执行了==>UPDATA_SECTION_LIST");
     
     // state.dialogList = data;
@@ -88,8 +98,8 @@ const mutations = {
     console.log(data, "执行了==>UPDATA_DIALOG_LIST");
     // state.dialogList = data;
   },
-  [ADD_SECTION](state, data) {
-    console.log(data, "执行了==>ADD_SECTION");
+  [UPDATA_SECTION](state, data) {
+    console.log(data, "执行了==>updata_SECTION");
     if(data.type=="add_section"){
       let describe = data.describe
       if(!state.sectionList[describe] ){
@@ -129,6 +139,12 @@ const mutations = {
         }
       
     }
+    if(data.type == "delete_section"){
+      if(state.sectionList[data.sectionName]){
+        delete state.sectionList[data.sectionName]
+        console.warn("删除了",data.sectionName)
+      }
+    }
     // if(!state.sectionList[describe]){
     //   state.sectionList[describe] = section
     // }
@@ -139,8 +155,8 @@ const mutations = {
 };
 
 const actions = {
-  ADD_SECTION({ commit }, data){
-    commit(ADD_SECTION, data);
+  UPDATA_SECTION({ commit }, data){
+    commit(UPDATA_SECTION, data);
   },
   UPDATA_SECTION_LIST({ commit }, data) {
     commit(UPDATA_SECTION_LIST, data);

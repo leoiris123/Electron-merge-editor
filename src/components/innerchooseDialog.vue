@@ -30,20 +30,33 @@
       </el-col>
     </el-row>
     <span slot="footer" class="dialog-footer">
-      <button @click="handleClick">handleClick</button>
-      <el-button @click="innerchooseDialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="handleConfirm('modify_normal')"
-        >修改</el-button
-      >
-      <el-button type="primary" @click="handleConfirm('add_normal')"
-        >新增</el-button
-      >
-      <el-button type="primary" @click="handleConfirm('delete_normal')"
-        >删除</el-button
-      >
-      <el-button type="danger" @click="handleConfirm('add_branch')"
-        >新增分支</el-button
-      >
+      <!-- <button @click="handleClick">handleClick</button> -->
+
+      <el-row type="flex-end" style="margin-bottom:10px">
+        <el-button @click="innerchooseDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="handleConfirm('modify_normal')"
+          >修改</el-button
+        >
+        <el-button type="primary" @click="handleConfirm('add_normal')"
+          >新增</el-button
+        >
+        <el-button type="primary" @click="handleConfirm('delete_normal')"
+          >删除</el-button
+        >
+      </el-row>
+
+      <el-row type="flex-end">
+        <el-button type="danger" @click="handleConfirm('add_branch')"
+          >新增分支</el-button
+        >
+        <el-button type="danger" @click="handleConfirm('add_end_branch')"
+          >新增结束</el-button
+        >
+        <el-button type="danger" @click="handleConfirm('delete_end_branch')"
+          >删除结束</el-button
+        >
+      </el-row>
+
       <el-select
         v-if="addBranch"
         v-model="nextState"
@@ -137,7 +150,7 @@ export default {
   methods: {
     handleConfirm(type) {
       let checkList = this.checkList;
-      if (this.checkList.length < 1 && type!=="delete_normal") {
+      if (this.checkList.length < 1 && (type == "add_normal" || type == "modify_normal")) {
         // this.innerchooseDialogVisible = false;
         console.warn("选择失败");
         return;

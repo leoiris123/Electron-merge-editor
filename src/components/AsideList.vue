@@ -16,6 +16,11 @@
       >
       <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
     </el-row>
+    <el-row type="flex" style="margin-top:10px"> 
+       <el-button @click="deleteSection" plain icon="el-icon-delete-solid"
+        >删除场景</el-button
+      >
+    </el-row>
   </div>
 </template>
 
@@ -82,12 +87,27 @@ export default {
           type: "add_section",
           describe: id,
         };
-        this.$store.dispatch("section/ADD_SECTION", msg);
+        this.$store.dispatch("section/UPDATA_SECTION", msg);
       });
       console.log(lostsectionIDList, "找不到");
     },
+    selectName(){
+         this.$forceUpdate();
+    }
   },
   methods: {
+    deleteSection(){
+      console.log(this.selectName,"this.selectName")
+      if(!this.selectName){
+         console.log( "*******************");
+        return
+      }
+      let msg={
+        type:"delete_section",
+        sectionName:this.selectName
+      }
+      this.$store.dispatch("section/UPDATA_SECTION", msg);
+    },
     addSection() {
       if (this.inputaddSection == false) {
         return;
@@ -99,10 +119,8 @@ export default {
         type: "add_section",
         describe: addsectionName,
       };
-      this.$store.dispatch("section/ADD_SECTION", msg);
-      this.$nextTick(() => {
-        this.$forceUpdate();
-      });
+      this.$store.dispatch("section/UPDATA_SECTION", msg);
+
     },
     handleNodeClick(data) {
       let sectionListAll = this.$store.getters["section/sectionListGet"];

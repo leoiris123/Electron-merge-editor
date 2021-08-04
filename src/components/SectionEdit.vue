@@ -35,8 +35,9 @@
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="choice" label="choice" width="280">
+          <el-table-column label="choice" width="280">
             <template slot-scope="scope">
+              <!-- 分支语句判断 -->
               <el-popover
                 v-if="scope.row.choice"
                 trigger="hover"
@@ -60,6 +61,13 @@
                   }}</el-tag>
                 </div>
               </el-popover>
+              <!-- 结束语句判断 -->
+ 
+              <div class="name-wrapper" v-if="scope.row.end">
+                <el-tag size="medium">{{
+                  scope.row.end ? "结束语" : ""
+                }}</el-tag>
+              </div>
             </template>
           </el-table-column>
           <!-- <el-table-column prop="nextStates" label="nextStates" width="100">
@@ -169,7 +177,7 @@ export default {
           selectStateName: selectStateName,
         };
 
-        this.$store.dispatch("section/ADD_SECTION", msg);
+        this.$store.dispatch("section/UPDATA_SECTION", msg);
       }
       console.log(sectionName, selectStateName, "**");
     },
@@ -182,7 +190,7 @@ export default {
           sectionName: sectionName,
           stateName: inputaddstate,
         };
-        this.$store.dispatch("section/ADD_SECTION", msg);
+        this.$store.dispatch("section/UPDATA_SECTION", msg);
       }
     },
     setCurrent(row) {
