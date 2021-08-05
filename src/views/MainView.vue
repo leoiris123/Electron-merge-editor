@@ -38,7 +38,7 @@ import SectionEdit from "@/components/SectionEdit";
 import { loader } from "../../script/load/load.js";
 import { exportutil } from "../../script/load/exportfile.js";
 const { dialog } = window.require("electron").remote;
-import {filtertool} from "../../script/tool/filterempty"
+import { filtertool } from "../../script/tool/filterempty";
 // const { dialog } = require('electron')
 export default {
   name: "MainView",
@@ -61,9 +61,9 @@ export default {
       loader.loadFile(rootPath, "dialogEditData");
       // loader.loadXML(rootPath, "excelDialog");
       //导入资源配置文件
-      loader.loadFile(rootPath,"configuration")
+      loader.loadFile(rootPath, "configuration");
       loader.loadXML(rootPath, "dialogConfig");
-      loader.loadXML(rootPath,"textConfig")
+      loader.loadXML(rootPath, "textConfig");
       // loader.loadXML(rootPath,"aa") //测试用
     },
     importResource() {
@@ -107,12 +107,12 @@ export default {
       console.log("=>导出资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-      filtertool.filterindex(sectionListAll)
+      filtertool.filterindex(sectionListAll);
       let sectionDataStr = JSON.stringify(sectionListAll);
       exportutil.exportJSON(rootPath, "sectionData", sectionDataStr);
-   
+
       let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
-         filtertool.filterempty(dialogEditListAll)
+      filtertool.filterempty(dialogEditListAll);
       let dialogEditListStr = JSON.stringify(dialogEditListAll);
       exportutil.exportJSON(rootPath, "dialogEditList", dialogEditListStr);
     },
@@ -120,12 +120,12 @@ export default {
       console.log("=>保存资源");
       let rootPath = localStorage.getItem("rootPath");
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-     filtertool.filterindex(sectionListAll)
+      filtertool.filterindex(sectionListAll);
       let sectionDataStr = JSON.stringify(sectionListAll);
       exportutil.saveJSON(rootPath, "sectionData", sectionDataStr);
-      
+
       let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
-       filtertool.filterempty(dialogEditListAll)
+      filtertool.filterempty(dialogEditListAll);
       let dialogEditListStr = JSON.stringify(dialogEditListAll);
       exportutil.saveJSON(rootPath, "dialogEditList", dialogEditListStr);
     },
@@ -156,7 +156,7 @@ export default {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
-  line-height: 20px
+  line-height: 20px;
 }
 
 .el-main {

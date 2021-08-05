@@ -85,7 +85,7 @@ const mutations = {
       ]["choice"] = data.choice;
       console.log(
         state.sectionList[data.sectionName].states[data.stateGroupName],
-        " state.sectionList[data.sectionName].states[data.stateGroupName]"
+        "state.sectionList[data.sectionName].states[data.stateGroupName]"
       );
     }
     if (data.type == "add_next") {

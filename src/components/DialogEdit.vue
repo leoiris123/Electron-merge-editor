@@ -11,18 +11,19 @@
           {{ item.txt }}<i class="header-icon el-icon-info"></i>
         </template>
         <div>
-          <el-tabs tab-position="top" type="card" style="height: 300px;">
+          <el-tabs tab-position="top" type="card" style="height: 400px">
             <el-tab-pane label="立绘配置">
-              <el-tabs tab-position="left" style="height:300px;">
+              <el-tabs tab-position="left" style="height: 400px">
                 <el-tab-pane
                   v-for="(character, index1) in characterList"
                   :key="index1"
                   :label="character"
                 >
-                  <el-row>
+                <el-row type="flex">
+                <el-col :span=10>  
+                    <el-row>
                     {{ character }}
                   </el-row>
-
                   <el-row>
                     <el-col
                       >选择角色：<el-select
@@ -151,10 +152,17 @@
                         >显示名字</el-checkbox
                       >
                     </el-col>
-                  </el-row>
+                  </el-row> 
+                </el-col >
+                <el-col class="preview" :span=14> 
+                  <div class="preview">
+                     这是预览动画
+                  </div>
+                 
+                </el-col>
+                </el-row>
                 </el-tab-pane>
               </el-tabs>
-              <input type="text" />
             </el-tab-pane>
 
             <el-tab-pane label="其他配置">
@@ -312,4 +320,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" >
+.preview{
+  background: rgb(122, 122, 206);
+  width: 500px;
+  height: 500px;
+}
+</style>
