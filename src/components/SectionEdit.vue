@@ -94,19 +94,21 @@
           >
         </el-row>
       </el-row>
-    <order-list> </order-list>
+       <innerchoose-dialog>  </innerchoose-dialog>
+
   </div>
 </template>
 
 <script>
+
 import event from "../../script/tool/event";
-// import section from "../store/modules/section";
-import OrderList from "../components/OrderList.vue";
+import InnerchooseDialog from './innerchooseDialog.vue';
 export default {
   name: "SectionEdit",
 
   components: {
-    OrderList,
+
+    InnerchooseDialog
   },
 
   directives: {},
@@ -252,7 +254,9 @@ export default {
         index: row.row_index,
         // messageId:row.messageId
       };
-      event.$emit("OpenOrderList", msg);
+      // event.$emit("OpenOrderList", msg);
+      event.$emit("innerchooseDialog", msg);
+     
       //   console.log(row, event, column, "DoubleClick==>row, event, column");
     },
     handleRowClick(row, event, column) {

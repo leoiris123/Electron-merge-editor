@@ -1,7 +1,5 @@
 <template>
   <div>
-    <!-- @node-drag-end="handleDragEnd"  draggable
-    :allow-drag="allowDrag" -->
     <el-tree
       :data="sectionList"
       :props="defaultProps"
@@ -10,14 +8,14 @@
       node-key="id"
       ref="aside"
     ></el-tree>
-    <el-row type="flex" style="margin-top:10px">
+    <el-row type="flex" style="margin-top: 10px">
       <el-button @click="addSection" plain icon="el-icon-plus"
         >新增场景</el-button
       >
       <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
     </el-row>
-    <el-row type="flex" style="margin-top:10px"> 
-       <el-button @click="deleteSection" plain icon="el-icon-delete-solid"
+    <el-row type="flex" style="margin-top: 10px">
+      <el-button @click="deleteSection" plain icon="el-icon-delete-solid"
         >删除场景</el-button
       >
     </el-row>
@@ -41,30 +39,29 @@ export default {
       },
       selectName: "",
       inputaddSection: "",
-      sectionListAllUpdata : this.$store.getters["section/sectionListGet"],
-      sectionListTemp:[]
+      sectionListAllUpdata: this.$store.getters["section/sectionListGet"],
+      sectionListTemp: [],
     };
   },
 
   mounted() {
-    event.$on("sectionChange",(val)=>{
-       this.sectionListAll = val
-    })
+    event.$on("sectionChange", (val) => {
+      this.sectionListAll = val;
+    });
     // console.log(this.textConfig,this.sectionList,"textConfig---sectionList---------++++++++++")
   },
   computed: {
-  
     textConfig: {
       get() {
         let textConfig = this.$store.getters["configuration/textConfigGet"];
         return textConfig;
       },
     },
-    sectionListAll:{
-      get(){
-        return this.$store.getters["section/sectionListGet"]
+    sectionListAll: {
+      get() {
+        return this.$store.getters["section/sectionListGet"];
       },
-      set(val){
+      set(val) {
         let sectionListAll = val;
         let sectionList = [];
         Object.keys(sectionListAll).map((item, index) => {
@@ -75,12 +72,11 @@ export default {
           };
           sectionList.push(temp);
         });
-        this.sectionListTemp = sectionList
-      }
+        this.sectionListTemp = sectionList;
+      },
     },
-    sectionList:{
-      get(){
-         
+    sectionList: {
+      get() {
         let sectionListAll = this.sectionListAll;
         let sectionList = [];
         Object.keys(sectionListAll).map((item, index) => {
@@ -98,16 +94,14 @@ export default {
         //   return this.sectionListTemp
         // }
         //缓存
-        return this.sectionListTemp.length>0?this.sectionListTemp:sectionList
+        return this.sectionListTemp.length > 0
+          ? this.sectionListTemp
+          : sectionList;
       },
-      set(){
-
-      }
+      set() {},
     },
-   
   },
   watch: {
-  
     textConfig(newval) {
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       let lostsectionIDList = [];
@@ -125,39 +119,37 @@ export default {
       });
       console.log(lostsectionIDList, "找不到");
     },
-    sectionListAllUpdata(){
-        console.log("this.$forceUpdate();")
-       
-    }
+    sectionListAllUpdata() {
+      console.log("this.$forceUpdate();");
+    },
   },
   methods: {
-
-    restoreData(){
+    restoreData() {
       let sectionListAll = this.sectionListAll;
 
-        let sectionList = [];
-        Object.keys(sectionListAll).map((item, index) => {
-          let temp = {
-            id: index,
-            label: this.textConfig[item] ? item + this.textConfig[item] : item,
-            sectionName: item,
-          };
-          sectionList.push(temp);
-        });
-        console.log(sectionListAll, "sectionListAll");
-        console.log(sectionList, "sectionList");
-        return sectionList;
+      let sectionList = [];
+      Object.keys(sectionListAll).map((item, index) => {
+        let temp = {
+          id: index,
+          label: this.textConfig[item] ? item + this.textConfig[item] : item,
+          sectionName: item,
+        };
+        sectionList.push(temp);
+      });
+      console.log(sectionListAll, "sectionListAll");
+      console.log(sectionList, "sectionList");
+      return sectionList;
     },
 
-    deleteSection(){
-      console.log(this.selectName,"this.selectName")
-      if(!this.selectName){
-        return
+    deleteSection() {
+      console.log(this.selectName, "this.selectName");
+      if (!this.selectName) {
+        return;
       }
-      let msg={
-        type:"delete_section",
-        sectionName:this.selectName
-      }
+      let msg = {
+        type: "delete_section",
+        sectionName: this.selectName,
+      };
       this.$store.dispatch("section/UPDATA_SECTION", msg);
     },
     addSection() {
@@ -172,9 +164,9 @@ export default {
         describe: addsectionName,
       };
       this.$store.dispatch("section/UPDATA_SECTION", msg);
-
     },
     handleNodeClick(data) {
+           
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       console.log(this.textConfig, "-textConfig");
 
@@ -185,6 +177,10 @@ export default {
       );
       this.selectName = data.sectionName;
       event.$emit("selectNameChange", this.selectName);
+
+      /* eslint-disable */
+      event.$emit("headerShowName",data.label)
+     /* eslint-disable */
     },
   },
 };

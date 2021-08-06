@@ -1,12 +1,12 @@
 <template>
   <el-dialog
-    width="50%"
+    width="80%"
     title="选择对话"
     :visible.sync="innerchooseDialogVisible"
     append-to-body
   >
     <el-row>
-      <el-col :span="8">
+      <el-col :span="5">
         <el-select
           @change="handleNamechange"
           v-model="property"
@@ -21,7 +21,7 @@
           </el-option>
         </el-select>
       </el-col>
-      <el-col :span="16">
+      <el-col :span="19">
         <el-checkbox-group v-model="checkList">
           <el-row v-for="(message, index) in messageList" :key="index">
             <el-checkbox :label="message.id">{{ message.txt }}</el-checkbox>
@@ -60,10 +60,12 @@
       <el-select
         v-if="addBranch"
         v-model="nextState"
-        multiple
+        filterable
+        allow-create
         placeholder="请选择nextState"
+        value-key="index"
       >
-        <el-option v-for="item in 10" :key="item" :label="item" :value="item">
+        <el-option v-for="(item,index) in 10" :key="index" :label="item" :value="item">
         </el-option>
       </el-select>
     </span>
@@ -110,6 +112,7 @@ export default {
         },
       ],
       value: "",
+      addNormalHelper:0
     };
   },
 
@@ -119,6 +122,7 @@ export default {
       this.received = received;
       this.addBranch = false;
       this.nextState = null;
+      this.addNormalHelper= 0
       console.log(received, "received--");
     });
   },
@@ -148,6 +152,9 @@ export default {
   },
 
   methods: {
+    changeType(str){
+      return parseInt(str)
+    },
     handleConfirm(type) {
       let checkList = this.checkList;
       if (
@@ -164,7 +171,7 @@ export default {
           this.addBranch = true;
           return;
         }
-        if (!this.nextState.length == 2) {
+        if (this.nextState == "" || checkList.length<1) {
           return;
         }
         let msgbranch = {};
@@ -173,16 +180,22 @@ export default {
           {
             type: type,
             messageId: checkList[0], //后续增加多选功能
-            choice: [
-              {
+            choice:  {
                 messageId: checkList[0],
-                nextState: this.nextState[0],
+                nextState: this.nextState,
               },
-              {
-                messageId: checkList[1],
-                nextState: this.nextState[1],
-              },
-            ],
+            
+            
+            // choice: [
+            //   {
+            //     messageId: checkList[0],
+            //     nextState: this.nextState,
+            //   },
+            //   {
+            //     messageId: checkList[1],
+            //     nextState: this.nextState[1],
+            //   },
+            // ],
           },
           this.received
         );
@@ -201,7 +214,7 @@ export default {
           this.addBranch = true;
           return;
         }
-        if (!this.nextState.length == 1) {
+        if (this.nextState == "") {
           return;
         }
         let msg = {};
@@ -209,19 +222,36 @@ export default {
           msg,
           {
             type: type,
-            next: this.nextState[0],
+            next: this.nextState,
             messageId: checkList[0], //后续增加多选功能
           },
           this.received
         );
         this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
         this.$notify({
-        title: "next设置成功",
-        message: "成功",
-        type: "success",
-        duration: 1100,
-      });
-        return
+          title: "next设置成功",
+          message: "成功",
+          type: "success",
+          duration: 1100,
+        });
+        return;
+      }
+      if (type == "add_normal") {
+        checkList.map((item,index) => {
+          this.addNormalHelper++
+          let msg = {};
+          Object.assign(
+            msg,
+            {
+              type: type,
+              messageId: item, //后续增加多选功能
+            },
+            this.received
+          );
+          msg.index = msg.index + index + this.addNormalHelper
+          this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
+        });
+        return;
       }
       let msg = {};
       Object.assign(
@@ -238,7 +268,6 @@ export default {
         type: "success",
         duration: 1100,
       });
-      this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
     },
     handleNamechange() {
       this.checkList = [];

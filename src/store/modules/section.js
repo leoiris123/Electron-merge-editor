@@ -80,9 +80,14 @@ const mutations = {
       );
     }
     if (data.type == "add_branch") {
-      state.sectionList[data.sectionName].states[data.stateGroupName][
-        data.index
-      ]["choice"] = data.choice;
+      let currentid =  state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
+      if(currentid["choice"]){
+        currentid["choice"].push(data.choice)
+      }else {
+        currentid["choice"] = []
+        currentid["choice"].push(data.choice)
+      }
+    // ["choice"] = data.choice;
       console.log(
         state.sectionList[data.sectionName].states[data.stateGroupName],
         "state.sectionList[data.sectionName].states[data.stateGroupName]"

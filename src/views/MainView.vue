@@ -20,7 +20,9 @@
           <aside-list></aside-list>
         </el-aside>
         <el-container>
-          <el-header height="20%">Header</el-header>
+          <el-header height="20%">
+            <header-view> </header-view>
+          </el-header>
           <el-main>
             <section-edit> </section-edit>
           </el-main>
@@ -39,14 +41,17 @@ import { loader } from "../../script/load/load.js";
 import { exportutil } from "../../script/load/exportfile.js";
 const { dialog } = window.require("electron").remote;
 import { filtertool } from "../../script/tool/filterempty";
+import HeaderView from "../views/HeaderView.vue"
 // const { dialog } = require('electron')
 export default {
   name: "MainView",
   components: {
     // DialogView,
     BackBtn,
+    HeaderView,
     AsideList,
     SectionEdit,
+
   },
   data() {
     return {

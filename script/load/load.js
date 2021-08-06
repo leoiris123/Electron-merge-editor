@@ -52,12 +52,14 @@ export const loader = {
         });
       });
       if(XMLname =="textConfig"){
+     
        let after =  sorttool.sortXML(result)
        store.dispatch(XMLList[XMLname].storeScript, after);
        console.log(result,after,"after---------**")
         return
       }
       //对导入的excel数据进行整理
+      console.log(result,wb,"--------------------------------")
       let list = result[0].list
       let dialog = {}
       list.map((item)=>{
