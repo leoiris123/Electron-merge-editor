@@ -65,7 +65,12 @@
         placeholder="请选择nextState"
         value-key="index"
       >
-        <el-option v-for="(item,index) in 10" :key="index" :label="item" :value="item">
+        <el-option
+          v-for="(item,index) in 10"
+          :key="index"
+          :label="item"
+          :value="item"
+        >
         </el-option>
       </el-select>
     </span>
@@ -112,7 +117,7 @@ export default {
         },
       ],
       value: "",
-      addNormalHelper:0
+      addNormalHelper: 0,
     };
   },
 
@@ -122,7 +127,7 @@ export default {
       this.received = received;
       this.addBranch = false;
       this.nextState = null;
-      this.addNormalHelper= 0
+      this.addNormalHelper = 0;
       console.log(received, "received--");
     });
   },
@@ -152,8 +157,8 @@ export default {
   },
 
   methods: {
-    changeType(str){
-      return parseInt(str)
+    changeType(str) {
+      return parseInt(str);
     },
     handleConfirm(type) {
       let checkList = this.checkList;
@@ -171,7 +176,7 @@ export default {
           this.addBranch = true;
           return;
         }
-        if (this.nextState == "" || checkList.length<1) {
+        if (this.nextState == "" || checkList.length < 1) {
           return;
         }
         let msgbranch = {};
@@ -180,12 +185,11 @@ export default {
           {
             type: type,
             messageId: checkList[0], //后续增加多选功能
-            choice:  {
-                messageId: checkList[0],
-                nextState: this.nextState,
-              },
-            
-            
+            choice: {
+              messageId: checkList[0],
+              nextState: this.nextState,
+            },
+
             // choice: [
             //   {
             //     messageId: checkList[0],
@@ -237,8 +241,8 @@ export default {
         return;
       }
       if (type == "add_normal") {
-        checkList.map((item,index) => {
-          this.addNormalHelper++
+        checkList.map((item, index) => {
+          this.addNormalHelper++;
           let msg = {};
           Object.assign(
             msg,
@@ -248,7 +252,7 @@ export default {
             },
             this.received
           );
-          msg.index = msg.index + index + this.addNormalHelper
+          msg.index = msg.index + index + this.addNormalHelper;
           this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
         });
         return;
@@ -262,6 +266,7 @@ export default {
         },
         this.received
       );
+      this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
       this.$notify({
         title: "成功",
         message: "成功",
