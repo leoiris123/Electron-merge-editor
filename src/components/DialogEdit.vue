@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div ref="box"> </div>
     <!-- <button @click="test">test</button> -->
     <el-collapse v-model="currentName" accordion @change="handleChange">
       <el-collapse-item
@@ -297,6 +298,7 @@ export default {
     event.$on("saveAllDialog", () => {
       this.$store.dispatch("section/SET_DIALOG_EDIT_LIST", this.dialogEditList);
     });
+    // let app = new PIXI.Application({width: 256, height: 256});
   },
 
   methods: {

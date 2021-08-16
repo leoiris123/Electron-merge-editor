@@ -17,7 +17,7 @@
           :border="true"
           @row-click="handleRowClick"
           @row-dblclick="handleDoubleClick"
-          height="560"
+       
           
           show-overflow-tooltip
           :header-cell-style="tableHeaderColor"
@@ -25,7 +25,7 @@
           style="width: 100%"
         >
           <el-table-column type="index" width="50"> </el-table-column>
-          <el-table-column prop="messageId" label="messageId" width="740">
+          <el-table-column prop="messageId" label="messageId" width="730">
             <template slot-scope="scope">
               <div>
                 {{

@@ -20,7 +20,7 @@
           <aside-list></aside-list>
         </el-aside>
         <el-container>
-          <el-header height="20%">
+          <el-header height="4%">
             <header-view> </header-view>
           </el-header>
           <el-main>
