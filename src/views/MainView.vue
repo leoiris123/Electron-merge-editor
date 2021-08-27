@@ -120,6 +120,11 @@ export default {
       filtertool.filterempty(dialogEditListAll);
       let dialogEditListStr = JSON.stringify(dialogEditListAll);
       exportutil.exportJSON(rootPath, "dialogEditList", dialogEditListStr);
+
+      // dialogListArrange
+      let dialogListArrange = this.$store.getters["section/dialogListArrangeGet"];
+      let dialogListArrangeStr = JSON.stringify(dialogListArrange);
+      exportutil.exportJSON(rootPath, "dialogListArrange", dialogListArrangeStr);
     },
     saveResource() {
       console.log("=>保存资源");

@@ -4,6 +4,7 @@ import event from "../tool/event";
 const exportPath = {
   sectionData: "/exportData/exportSection.json",
   dialogEditList: "/exportData/exportDialoglib.json",
+  dialogListArrange:"/exportData/exportDialogConfig.json"
 };
 const savePath = {
     sectionData: "/section-1/conversation.json",

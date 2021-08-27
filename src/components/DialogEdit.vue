@@ -139,6 +139,21 @@
                           >
                         </el-col>
                       </el-row>
+                       <!-- 翻转 -->
+                      <el-row>
+                        <el-col>
+                          <el-checkbox
+                            @change="handleSelectChange"
+                            v-if="
+                              dialogEditList[item.id][character].char == ''
+                                ? false
+                                : true
+                            "
+                            v-model="dialogEditList[item.id][character].flip"
+                            >角色翻转</el-checkbox
+                          >
+                        </el-col>
+                      </el-row>
                       <!-- 显示名字-->
                       <el-row>
                         <el-col>
@@ -204,7 +219,6 @@ export default {
       currentName: ["1"],
       selectDialogGroupName: "",
       characterList: ["left1", "right1", "left2", "right2"],
-
       value: "",
       configuration: this.$store.getters["configuration/configurationGet"],
     };
@@ -262,6 +276,7 @@ export default {
                 char: "",
                 emotion: "",
                 isMain: false,
+                flip:false
               };
             }
           });
@@ -279,39 +294,42 @@ export default {
     event.$on("saveAllDialog", () => {
       this.$store.dispatch("section/SET_DIALOG_EDIT_LIST", this.dialogEditList);
     });
-    const app = new PIXI.Application({
-      width: 600,
-      height: 600,
-      // antialias: true,
-      // transparent: false,
-      // resolution: 2,
-      // autoResize: true,
-    });
-    this.$refs.box.appendChild(app.view);
-    // const loader = new PIXI.Loader();
-    const loader = PIXI.Loader.shared;// Loader.shared内置的单例loader
-    loader.add("demo1", "./image-1.png").load(setup);
-    loader.onProgress.add((loader) => {
-});
-    function setup() {
-      let test = new PIXI.Container();
-      let demo1 = new PIXI.Sprite(loader.resources["demo1"].texture);
-      demo1.width = 300;
-      demo1.height = 300;
-      demo1.x = 60;
-      demo1.y = 60;
-      console.log(demo1,'-----demo1')
-      console.log(test,'-----test')
-      test.addChild(demo1)
+    // let app = new PIXI.Application({
+    //   width: 600,
+    //   height: 600,
+    //   // antialias: true,
+    //   // transparent: false,
+    //   // resolution: 2,
+    //   // autoResize: true,
+    // });
+    // this.$refs.box.appendChild(app.view);
+    // // const loader = new PIXI.Loader();
+    // const loader = PIXI.Loader.shared; // Loader.shared内置的单例loader
+    // loader.add("demo1", "./image-1.png").load(setup);
+    // // loader.onProgress.add((loader) => {});
 
-      // demo1.position.set(50, 50);
-      app.stage.addChild(test);
+   
+    // function setup() {
+    //    let type = "WebGL";
+    // if(!PIXI.utils.isWebGLSupported()){
+    //     type = "canvas";
+    // }
+    //    PIXI.utils.sayHello(type,"asdad");
+    //   let demo1 = new PIXI.Sprite(loader.resources["demo1"].texture);
+    //   console.log(loader,"loader")
+    //   demo1.width = 300;
+    //   demo1.height = 300;
+    //   demo1.x = 60;
+    //   demo1.y = 60;
+    //   console.log(demo1, "-----demo1");
+      
+    //   // demo1.position.set(50, 50);
+    //   app.stage.addChild(demo1);
 
-      console.log(app.stage,'-----app')
+    //   console.log(app.stage, "-----app");
+    // }
 
-    }
-
-    console.log("demo1");
+    // console.log("demo1");
   },
 
   methods: {
