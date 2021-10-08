@@ -14,10 +14,12 @@ async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
     height: 1000,
-    width:1400,
+    width: 1400,
     useContentSize: true,
-    minWidth:1024,
-    minHeight:600,
+    minWidth: 1024,
+    minHeight: 600,
+    title: "测试t",
+    icon: "public-1.ico",
     webPreferences: {
       enableRemoteModule: true,
       nodeIntegration: true,
