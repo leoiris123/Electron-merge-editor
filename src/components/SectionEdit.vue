@@ -17,8 +17,6 @@
           :border="true"
           @row-click="handleRowClick"
           @row-dblclick="handleDoubleClick"
-       
-          
           show-overflow-tooltip
           :header-cell-style="tableHeaderColor"
           :data="item"
@@ -78,37 +76,33 @@
           <el-table-column prop="address" label="地址"> </el-table-column>  -->
         </el-table>
       </el-tab-pane>
-    
     </el-tabs>
-      <el-row style="position:absolute;bottom:5px">
-        <el-row type="flex" style="margin-top:10px">
-          <el-button @click="addstate" plain icon="el-icon-plus"
-            >新增对话列表</el-button
-          >
-          <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
-          <el-button @click="initdialog" plain icon="el-icon-plus"
-            >初始化对话列表</el-button
-          >
-          <el-button @click="deletedialog" plain icon="el-icon-delete-solid"
-            >删除对话列表</el-button
-          >
-        </el-row>
+    <el-row style="position: absolute; bottom: 5px">
+      <el-row type="flex" style="margin-top: 10px">
+        <el-button @click="addstate" plain icon="el-icon-plus"
+          >新增对话列表</el-button
+        >
+        <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
+        <el-button @click="initdialog" plain icon="el-icon-plus"
+          >初始化对话列表</el-button
+        >
+        <el-button @click="deletedialog" plain icon="el-icon-delete-solid"
+          >删除对话列表</el-button
+        >
       </el-row>
-       <innerchoose-dialog>  </innerchoose-dialog>
-
+    </el-row>
+    <innerchoose-dialog> </innerchoose-dialog>
   </div>
 </template>
 
 <script>
-
 import event from "../../script/tool/event";
-import InnerchooseDialog from './innerchooseDialog.vue';
+import InnerchooseDialog from "./innerchooseDialog.vue";
 export default {
   name: "SectionEdit",
 
   components: {
-
-    InnerchooseDialog
+    InnerchooseDialog,
   },
 
   directives: {},
@@ -121,28 +115,6 @@ export default {
       activeIndex: 0,
       inputaddstate: "",
       inputadddialog: "",
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄",
-        },
-      ],
     };
   },
 
@@ -188,9 +160,8 @@ export default {
     },
     dialogListArrange: {
       get() {
-        let dialogListArrange = this.$store.getters[
-          "section/dialogListArrangeGet"
-        ];
+        let dialogListArrange =
+          this.$store.getters["section/dialogListArrangeGet"];
         return dialogListArrange;
       },
     },
@@ -256,7 +227,7 @@ export default {
       };
       // event.$emit("OpenOrderList", msg);
       event.$emit("innerchooseDialog", msg);
-     
+
       //   console.log(row, event, column, "DoubleClick==>row, event, column");
     },
     handleRowClick(row, event, column) {
@@ -292,7 +263,7 @@ export default {
 </script>
 
 <style lang="scss">
-.sectionEdit{
+.sectionEdit {
   height: 100%;
   width: 100%;
 }

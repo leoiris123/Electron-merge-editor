@@ -1,5 +1,6 @@
 const SET_SECTION_LIST = "set_section_list"; //设置对话场景数据
 const SET_DIALOG_LIST = "set_dialog_list"; //设置对白资源
+const SET_DIALOG_LIST_ARRANGE = "set_dialog_list_arrange"; //设置对白资源
 const SET_DIALOG_EDIT_LIST = "set_dialog_edit_list"; //配置对白数据
 
 const UPDATA_SECTION_LIST = "updata_section_list";
@@ -45,7 +46,6 @@ const mutations = {
   [SET_DIALOG_LIST](state, data) {
     console.log(data, "执行了==>SET_DIALOG_LIST");
     state.dialogList = data;
-
     let dialogListArrange = {};
     //生成不分组的对话列表
     for (let key in state.dialogList) {
@@ -57,6 +57,11 @@ const mutations = {
       state.dialogListArrange,
       "state.dialogListArrange==>组合后数据"
     );
+  },
+
+  [SET_DIALOG_LIST_ARRANGE](state, data) {
+    state.dialogListArrange = data;
+    console.log("state.dialogListArrange:", data)
   },
   [UPDATA_SECTION_LIST](state, data) {
     if (data.type == "modify_normal") {
@@ -80,14 +85,14 @@ const mutations = {
       );
     }
     if (data.type == "add_branch") {
-      let currentid =  state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
-      if(currentid["choice"]){
+      let currentid = state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
+      if (currentid["choice"]) {
         currentid["choice"].push(data.choice)
-      }else {
+      } else {
         currentid["choice"] = []
         currentid["choice"].push(data.choice)
       }
-    // ["choice"] = data.choice;
+      // ["choice"] = data.choice;
       console.log(
         state.sectionList[data.sectionName].states[data.stateGroupName],
         "state.sectionList[data.sectionName].states[data.stateGroupName]"
@@ -197,6 +202,11 @@ const actions = {
   SET_DIALOG_LIST({ commit }, data) {
     commit(SET_DIALOG_LIST, data);
   },
+
+  SET_DIALOG_LIST_ARRANGE({ commit }, data) {
+    commit(SET_DIALOG_LIST_ARRANGE, data);
+  },
+
   SET_DIALOG_EDIT_LIST({ commit }, data) {
     commit(SET_DIALOG_EDIT_LIST, data);
   },
