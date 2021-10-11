@@ -76,7 +76,7 @@ export default {
     },
     goMainView(chapter) {
       console.log("==>进入主界面");
-
+      localStorage.setItem("chapter", chapter);
       //加载逻辑迁移到此处
       this.fullscreenLoading = true;
       let rootPath2 = this.rootPath + PATH_CONFIG.localDataPath + "/" + chapter;
@@ -91,12 +91,12 @@ export default {
       ]).then((res) => {
         this.fullscreenLoading = false;
         this.$router.push({ name: "MainView", params: { chapter: chapter } });
-        localStorage.setItem("chapter", chapter);
+
         console.log("res---", res);
       });
     },
     importResource() {
-      console.log("=>导入资源");
+      console.log("=>导入路径/资源");
 
       dialog
         .showOpenDialog({
@@ -108,6 +108,7 @@ export default {
             this.rootPath = result.filePaths[0];
             // this.loadFile(this.rootPath);
             localStorage.setItem("rootPath", this.rootPath);
+            this.finddirList();
             this.$notify({
               title: "导入成功",
               message: "读取路径成功",
@@ -133,6 +134,15 @@ export default {
           });
         });
     },
+  },
+  beforeRouteEnter(to, from, next) {
+    console.log("to,from", to, from);
+    next((vm) => {
+      if (from.name == "MainView") {
+        window.location.reload(); //章节切换清空store
+      }
+      // 通过 `vm` 访问组件实例
+    });
   },
 };
 </script>

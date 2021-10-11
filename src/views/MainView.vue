@@ -39,7 +39,7 @@
         </el-container>
       </el-container>
     </el-container>
-    <!-- <back-btn> </back-btn> -->
+    <back-btn> </back-btn>
   </div>
 </template>
 
@@ -59,7 +59,7 @@ export default {
   name: "MainView",
   components: {
     // DialogView,
-    // BackBtn,
+    BackBtn,
     HeaderView,
     AsideList,
     SectionEdit,
@@ -82,10 +82,6 @@ export default {
       let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
       let dialogListArrange =
         this.$store.getters["section/dialogListArrangeGet"];
-
-      let dialogpath = rootPath + "/replace/dialogEditData.json";
-      let scencepath = rootPath + "/replace/conversation.json";
-      let lanpath = rootPath + "/replace/DialogCharacterConfigs.json";
 
       let outaimDialogPath = rootPath + "/exportData/" + "exportDialoglib.json";
       let outaimScenePath = rootPath + "/exportData/" + "exportSection.json";

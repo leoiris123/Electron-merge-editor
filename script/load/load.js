@@ -1,9 +1,9 @@
 const fs = window.require("fs");
 // import { reject, resolve } from "core-js/fn/promise";
-import XLSX from "xlsx";
+import XLSX, { read } from "xlsx";
 import store from "../../src/store";
 import { sorttool } from "../tool/sortData.js";
-const fileList = {
+let fileList = {
   mainQuest: {
     localPath: "/MainQuestStarters.json",
     storeScript: "section/SET_MAINQUEST",
@@ -13,7 +13,7 @@ const fileList = {
     storeScript: "section/SET_SECTION_LIST",
   },
   dialogEditData: {
-    localPath: "/dialogEditData.json",
+    localPath: '/dialogEditData.json',
     storeScript: "section/SET_DIALOG_EDIT_LIST",
   },
   configuration: {
@@ -24,7 +24,7 @@ const fileList = {
 const XMLList = {
   //   excelDialog: "/localData/chapter_1/Dialog.xls",
   dialogConfig: {
-    localPath: "/dialogConfig.xls",
+    localPath: read("/dialogConfig.xlsx"),
     storeScript: "section/SET_DIALOG_LIST",
     sortType: { header: ["property", "id", "en", "txt"] },
   },
@@ -33,16 +33,37 @@ const XMLList = {
     storeScript: "configuration/SET_TEXT_CONFIG",
   },
 };
-
+// function read(path){
+//   //后续优化
+//   return 
+// }
+function getLocalPath(filename) {
+  if (filename === 'conversation') {
+    fileList[filename].localPath = `/conversation${getchapterNum()}.json`
+  } else if (filename === 'dialogEditData') {
+    fileList[filename].localPath = `/dialogEditData${getchapterNum()}.json`
+  } else if (filename === 'configuration') {
+    fileList[filename].localPath = `/DialogCharacterConfigs${getchapterNum()}.json`
+  }
+}
+function getExcelPath(filename) {
+  if (filename === 'dialogConfig') {
+    XMLList[filename].localPath = `/dialogConfig${getchapterNum()}.xlsx`
+  } else if (filename === 'textConfig') {
+    XMLList[filename].localPath = `/textConfig${getchapterNum()}.xlsx`
+  }
+}
+function getchapterNum() {
+  let chapter = localStorage.getItem("chapter").replace("chapter", "")
+  console.log("chapter11", chapter)
+  return chapter
+}
 export const loader = {
   // 加载XML文件
   loadXML(rootpath, XMLname) {
-
     return new Promise((resolve, reject) => {
       console.log("==>XMLname", XMLname);
-      setTimeout(() => {
-
-      }, 1000)
+      getExcelPath(XMLname)
       fs.readFile(rootpath + XMLList[XMLname].localPath, (err, data) => {
         if (err) {
           console.log("err", err);
@@ -77,12 +98,12 @@ export const loader = {
         if (XMLname == "textConfig") {
           let after = sorttool.sortXML(result);
           store.dispatch(XMLList[XMLname].storeScript, after);
-          console.log(result, after, "after---------**");
+          // console.log(result, after, "after---------**");
           return;
         }
         if (XMLname == "dialogConfig") {
           //对导入的excel数据进行整理
-          console.log(result, wb, "--------------------------------");
+          // console.log(result, wb, "--------------------------------");
           let list = result[0].list;
           let dialog = {};
           list.map((item, index) => {
@@ -97,7 +118,7 @@ export const loader = {
               }
             }
           });
-          console.log(list, "list");
+          // console.log(list, "list");
           store.dispatch(XMLList[XMLname].storeScript, dialog);
         }
 
@@ -108,6 +129,8 @@ export const loader = {
   },
   // 加载json文件
   loadFile(rootpath, filename) {
+    getLocalPath(filename)
+    console.log("fileList[filename]", fileList[filename])
     return new Promise((resolve, reject) => {
       console.log("==>rootpath,", rootpath);
       console.log("==>filename", filename);

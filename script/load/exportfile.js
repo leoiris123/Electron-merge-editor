@@ -3,15 +3,39 @@ const path = require("path");
 import event from "../tool/event";
 import { PATH_CONFIG } from "../../script/config/config.js";
 
-const exportPath = {
+let exportPath = {
   sectionData: "/exportSection.json",
   dialogEditList: "/exportDialoglib.json",
   dialogListArrange: "/exportDialogConfig.json"
 };
-const savePath = {
+let savePath = {
   sectionData: "/conversation.json",
   dialogEditList: "/dialogEditData.json"
 };
+function getexportPath(filename) {
+  //后续优化
+  if (filename === 'sectionData') {
+    exportPath[filename] = `/exportSection${getchapterNum()}.json`
+  } else if (filename === 'dialogEditList') {
+    exportPath[filename] = `/exportDialoglib${getchapterNum()}.json`
+  } else if (filename === 'dialogListArrange') {
+    exportPath[filename] = `/exportDialogConfig${getchapterNum()}.json`
+  }
+}
+
+function getsavePath(filename) {
+  //后续优化
+  if (filename === 'sectionData') {
+    savePath[filename] = `/conversation${getchapterNum()}.json`
+  } else if (filename === 'dialogEditList') {
+    savePath[filename] = `/dialogEditData${getchapterNum()}.json`
+  }
+}
+function getchapterNum() {
+  let chapter = localStorage.getItem("chapter").replace("chapter", "")
+  console.log("chapter11", chapter)
+  return chapter
+}
 export const exportutil = {
 
   //   exportBuilding(exportPath,str){
@@ -29,10 +53,10 @@ export const exportutil = {
 
   exportJSON(rootpath, fileName, str) {
     let chapter = this.getChapter()
-
+    getexportPath(fileName)
     const sectionDataPath = path.join(rootpath + PATH_CONFIG.exportChapterDataPath + "/" + chapter, exportPath[fileName]);
-    console.log("chapter:", chapter)
-    console.log("sectionDataPath:", sectionDataPath)
+
+    console.log("exportPath[fileName]", exportPath[fileName])
 
     fs.writeFileSync(sectionDataPath, str)
     event.$notify({
@@ -47,8 +71,9 @@ export const exportutil = {
 
   saveJSON(rootpath, fileName, str) {
     let chapter = this.getChapter()
+    getsavePath(fileName)
+    console.log(savePath[fileName], "savePath[fileName]")
     const sectionDataPath = path.join(rootpath + PATH_CONFIG.localDataPath + "/" + chapter, savePath[fileName]);
-    console.log("chapter:", chapter)
     console.log("sectionDataPath:", sectionDataPath)
 
     fs.writeFileSync(sectionDataPath, str)
