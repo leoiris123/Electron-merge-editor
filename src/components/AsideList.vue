@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="aside">
     <el-tree
       :data="sectionList"
       :props="defaultProps"
@@ -166,7 +166,6 @@ export default {
       this.$store.dispatch("section/UPDATA_SECTION", msg);
     },
     handleNodeClick(data) {
-           
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       console.log(this.textConfig, "-textConfig");
 
@@ -179,8 +178,8 @@ export default {
       event.$emit("selectNameChange", this.selectName);
 
       /* eslint-disable */
-      event.$emit("headerShowName",data.label)
-     /* eslint-disable */
+      event.$emit("headerShowName", data.label);
+      /* eslint-disable */
     },
   },
 };
@@ -193,5 +192,8 @@ export default {
 .el-tree-node__label {
   font-size: 14px;
   line-height: 14px;
+}
+#aside {
+  height: 85vh;
 }
 </style>

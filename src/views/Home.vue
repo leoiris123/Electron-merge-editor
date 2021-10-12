@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" id="homenode">
     <el-row type="flex">
       <el-button @click="importResource">导入路径</el-button>
       <el-input :value="rootPath" placeholder="请选择"></el-input>
@@ -7,7 +7,8 @@
     <!-- <el-button plain icon="el-icon-chat-line-round" @click="goMainView"
       >进入主界面</el-button
     > -->
-    <el-row style="top: 5%">
+
+    <el-row type="flex" style="top: 5%; justify-content: center">
       <el-row v-for="(chapter, index) in dirList" :key="index" class="row">
         <el-button
           type="primary"
@@ -29,6 +30,7 @@ import { PATH_CONFIG } from "../../script/config/config.js";
 import { loader } from "../../script/load/load.js";
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
+import ContextMenu from "../../script/tool/menu.js";
 export default {
   name: "Home",
   components: {},
@@ -45,6 +47,7 @@ export default {
       this.rootPath = rootPath;
     }
     this.finddirList();
+    // this.customMenu(); //测试自定义菜单
   },
   computed: {},
   methods: {
@@ -133,6 +136,49 @@ export default {
             duration: 1500,
           });
         });
+    },
+    customMenu() {
+      document.body.onmouseup = function (e) {
+        const menuSinglton = ContextMenu({
+          menus: [
+            {
+              name: "测试自定义",
+              onClick: function (e) {
+                console.log("menu1 clicked");
+              },
+            },
+            {
+              name: "贝克汉姆·雷",
+              onClick: function (e) {
+                console.log("menu2 clicked");
+              },
+            },
+            {
+              name: "莱昂纳多·雷",
+              onClick: function (e) {
+                console.log("menu3 clicked");
+              },
+            },
+          ],
+        });
+        // let node = document.querySelector("#homenode");
+        let menu = menuSinglton.getInstance();
+        //在body里点击触发事件
+        console.log(e); //将传进去的参数打印出来
+        if (e.button === 2) {
+          //如果button=1（鼠标左键），button=2（鼠标右键），button=0（鼠标中间键）
+          console.log(e.offsetX, e.offsetY, "鼠标位置"); //打印出鼠标点击的坐标
+          // menu.style.top = e.offsetY + "px"; //鼠标点击时给div定位Y轴
+          // menu.style.left = e.offsetX + "px"; //鼠标点击时给div定位X轴
+          menu.style.top = e.pageY + "px"; //鼠标点击时给div定位Y轴
+          menu.style.left = e.pageX + "px"; //鼠标点击时给div定位X轴
+
+          menu.style.display = "block"; //显示div盒子
+          menu.style.position = "absolute";
+        } else {
+          menu.style.display = "none"; //否则不显示div盒子
+        }
+      };
     },
   },
   beforeRouteEnter(to, from, next) {
@@ -317,6 +363,6 @@ p {
   }
 }
 .row {
-  margin: 9px;
+  margin: 9px 20px;
 }
 </style>

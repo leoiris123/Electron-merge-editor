@@ -14,11 +14,16 @@
         <div>
           <el-tabs tab-position="top" type="card" style="height: 400px">
             <el-tab-pane label="立绘配置">
-              <el-tabs tab-position="left" style="height: 400px">
+              <el-tabs
+                v-model="currentData.tabValue"
+                tab-position="left"
+                style="height: 400px"
+              >
                 <el-tab-pane
                   v-for="(character, index1) in characterList"
                   :key="index1"
                   :label="character"
+                  :name="character"
                 >
                   <el-row type="flex">
                     <el-col :span="10">
@@ -139,7 +144,7 @@
                           >
                         </el-col>
                       </el-row>
-                       <!-- 翻转 -->
+                      <!-- 翻转 -->
                       <el-row>
                         <el-col>
                           <el-checkbox
@@ -173,9 +178,7 @@
                       </el-row>
                     </el-col>
                     <el-col class="preview" :span="14">
-                      <div class="preview">
-                        这是预览动画
-                      </div>
+                      <div class="preview">这是预览动画</div>
                     </el-col>
                   </el-row>
                 </el-tab-pane>
@@ -216,6 +219,12 @@ export default {
 
   data() {
     return {
+      currentData: {
+        tabValue: "left1",
+        currentId: "",
+        char: "",
+        emotion: "",
+      },
       currentName: ["1"],
       selectDialogGroupName: "",
       characterList: ["left1", "right1", "left2", "right2"],
@@ -244,23 +253,15 @@ export default {
       get() {
         let dialogListAll = this.$store.getters["section/dialogListGet"];
         let selectGroupData = dialogListAll[this.selectDialogGroupName];
+        console.log(selectGroupData, "----------");
         return selectGroupData;
       },
     },
-    // configuration: {
-    //   get() {
-    //     let configuration = this.$store.getters[
-    //       "configuration/configurationGet"
-    //     ];
-    //     console.log("configurationGetconfigurationGet");
-    //     return configuration;
-    //   },
-    // },
+
     dialogEditList: {
       get() {
-        let dialogEditListBase = this.$store.getters[
-          "section/dialogEditListGet"
-        ];
+        let dialogEditListBase =
+          this.$store.getters["section/dialogEditListGet"];
         // let dialogEditList
         console.log(this.selectGroupData, "this.selectGroupData");
         let currentIDList = Object.keys(this.selectGroupData);
@@ -276,7 +277,7 @@ export default {
                 char: "",
                 emotion: "",
                 isMain: false,
-                flip:false
+                flip: false,
               };
             }
           });
@@ -294,60 +295,46 @@ export default {
     event.$on("saveAllDialog", () => {
       this.$store.dispatch("section/SET_DIALOG_EDIT_LIST", this.dialogEditList);
     });
-    // let app = new PIXI.Application({
-    //   width: 600,
-    //   height: 600,
-    //   // antialias: true,
-    //   // transparent: false,
-    //   // resolution: 2,
-    //   // autoResize: true,
-    // });
-    // this.$refs.box.appendChild(app.view);
-    // // const loader = new PIXI.Loader();
-    // const loader = PIXI.Loader.shared; // Loader.shared内置的单例loader
-    // loader.add("demo1", "./image-1.png").load(setup);
-    // // loader.onProgress.add((loader) => {});
-
-   
-    // function setup() {
-    //    let type = "WebGL";
-    // if(!PIXI.utils.isWebGLSupported()){
-    //     type = "canvas";
-    // }
-    //    PIXI.utils.sayHello(type,"asdad");
-    //   let demo1 = new PIXI.Sprite(loader.resources["demo1"].texture);
-    //   console.log(loader,"loader")
-    //   demo1.width = 300;
-    //   demo1.height = 300;
-    //   demo1.x = 60;
-    //   demo1.y = 60;
-    //   console.log(demo1, "-----demo1");
-      
-    //   // demo1.position.set(50, 50);
-    //   app.stage.addChild(demo1);
-
-    //   console.log(app.stage, "-----app");
-    // }
-
-    // console.log("demo1");
+    document.addEventListener("keydown", this.copygetValue);
   },
-
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.copygetValue);
+  },
   methods: {
-    handleSelectChange() {
-      this.$forceUpdate();
+    copygetValue(e) {
+      if (this.currentData.currentId === "") {
+        console.log("当前未打开任何数据");
+        return;
+      }
+      if (e.keyCode === 67 && (e.ctrlKey || e.metaKey)) {
+        this.currentData.char =
+          this.dialogEditList[this.currentData.currentId][
+            this.currentData.tabValue
+          ].char;
+        this.currentData.emotion =
+          this.dialogEditList[this.currentData.currentId][
+            this.currentData.tabValue
+          ].emotion;
+        this.$message.success("复制成功");
+      } else if (e.keyCode === 86 && (e.ctrlKey || e.metaKey)) {
+        this.dialogEditList[this.currentData.currentId][
+          this.currentData.tabValue
+        ].char = this.currentData.char;
+        this.dialogEditList[this.currentData.currentId][
+          this.currentData.tabValue
+        ].emotion = this.currentData.emotion;
+        this.$message.success("粘贴成功");
+        this.$forceUpdate();
+      }
     },
-    test() {
-      console.log(this.dialogList, "this.dialogList");
-      console.log(this.selectGroupData, "this.selectGroupData");
-      console.log(this.currentName, "this.currentName");
-      console.log(this.configuration, "this.configuration");
-      console.log(this.dialogEditList, "dialogEditList");
-      let dialogVO = new initDialogEditVO("asd");
-      console.log(dialogVO, "initDialogEditVO");
+    handleSelectChange() {
+      console.log(this.dialogEditList);
+      console.log(this.tabValue, "-----");
       this.$forceUpdate();
     },
     handleChange(val) {
-      console.log(val);
+      this.currentData.currentId = val;
+      this.currentData.tabValue = "left1";
     },
   },
 };

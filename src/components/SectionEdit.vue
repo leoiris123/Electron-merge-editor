@@ -91,18 +91,22 @@
         >
       </el-row>
     </el-row>
-    <innerchoose-dialog> </innerchoose-dialog>
+
+    <innerchoose-dialog></innerchoose-dialog>
+    <menu-tip :options="options" :stateTip="stateTip"></menu-tip>
   </div>
 </template>
 
 <script>
 import event from "../../script/tool/event";
 import InnerchooseDialog from "./innerchooseDialog.vue";
+import menuTip from "./menu.vue";
 export default {
   name: "SectionEdit",
 
   components: {
     InnerchooseDialog,
+    menuTip,
   },
 
   directives: {},
@@ -115,14 +119,64 @@ export default {
       activeIndex: 0,
       inputaddstate: "",
       inputadddialog: "",
+      options: [
+        {
+          name: "测试自定义",
+          onClick: function (e) {
+            console.log("menu1 clicked");
+          },
+        },
+        {
+          name: "贝克汉姆·雷",
+          onClick: function (e) {
+            console.log("menu2 clicked");
+          },
+        },
+        {
+          name: "莱昂纳多·雷",
+          onClick: function (e) {
+            console.log("menu3 clicked");
+          },
+        },
+      ],
+      stateTip: {
+        state: false,
+        pos: {
+          x: 0,
+          y: 0,
+        },
+      },
     };
   },
-
+  beforeDestroy() {
+    document.querySelector(".sectionEdit").onmouseup = null;
+  },
   mounted() {
     event.$on("selectNameChange", this.selectNameChange);
     event.$on("sectionChange", (val) => {
       this.sectionListAll = val;
     });
+    document.querySelector(".sectionEdit").onmouseup = (e) => {
+      console.log("E", e);
+
+      if (e.button == 2) {
+        this.stateTip = {
+          state: true,
+          pos: {
+            x: e.clientX,
+            y: e.clientY,
+          },
+        };
+      } else {
+        this.stateTip = {
+          state: false,
+          pos: {
+            x: e.clientX,
+            y: e.clientY,
+          },
+        };
+      }
+    };
   },
   computed: {
     sectionListAll: {
@@ -265,7 +319,7 @@ export default {
 <style lang="scss">
 .sectionEdit {
   height: 100%;
-  width: 100%;
+  width: 70vw;
 }
 .el-table .warning-row {
   background: rgb(185, 10, 39);

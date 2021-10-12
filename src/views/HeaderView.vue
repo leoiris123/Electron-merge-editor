@@ -1,38 +1,35 @@
 <template>
-    <div>
-         {{sectionName}}
-    </div>
+  <div style="text-align: center; height: 4vh; line-height: 4vh">
+    {{ sectionName }}
+  </div>
 </template>
 
 <script>
 import event from "../../script/tool/event";
 export default {
-    name: 'HeaderView',
+  name: "HeaderView",
 
-    components: {},
+  components: {},
 
-    directives: {},
+  directives: {},
 
-    data() {
-        return {
-            sectionName:""
-        };
-    },
+  data() {
+    return {
+      sectionName: "",
+    };
+  },
 
-    mounted() { 
-          /* eslint-disable */
-         event.$on("headerShowName",(val)=>{
-             this.sectionName = val 
-         })
-           /* eslint-disable */
-    },
+  mounted() {
+    /* eslint-disable */
+    event.$on("headerShowName", (val) => {
+      this.sectionName = val;
+    });
+    /* eslint-disable */
+  },
 
-    methods: {
-        
-    },
+  methods: {},
 };
 </script>
 
 <style lang="scss" scoped>
-
 </style>
