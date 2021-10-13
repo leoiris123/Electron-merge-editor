@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <el-container style="height:100%;weight100%">
-      <el-header height="10%" class="top-list">
+      <el-header height="6%" class="top-list">
         <el-button @click="dataCombine" type="primary" icon="el-icon-position"
           >导出合并</el-button
         >
@@ -218,7 +218,7 @@ export default {
 }
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
+  background-color: #d2d3ccf5;
   color: #333;
   text-align: center;
   line-height: 60px;
@@ -251,7 +251,7 @@ body > .el-container {
   /* line-height: 320px; */
 }
 .top-list {
-  background-color: #f1bcd7;
+  background-color: #8195b9;
   padding: 0;
   margin: 0;
 }

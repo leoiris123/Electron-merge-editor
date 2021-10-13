@@ -10,71 +10,10 @@
       @row-dblclick="handleDoubleClick"
       show-overflow-tooltip
       :header-cell-style="tableHeaderColor"
-      :data="statesDataArrange"
+      :data="statesData"
       style="width: 100%"
     >
-      <el-table-column prop="groupName" label="group" width="80">
-      </el-table-column>
-      <el-table-column prop="messageId" label="messageId" width="730">
-        <template slot-scope="scope">
-          <div>
-            {{
-              dialogListArrange[scope.row.messageId]
-                ? dialogListArrange[scope.row.messageId].txt
-                : scope.row.messageId
-            }}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="choice" width="200">
-        <template slot-scope="scope">
-          <el-row type="flex">
-            <!-- 分支语句判断 -->
-            <el-popover v-if="scope.row.choice" trigger="hover" placement="top">
-              <div v-for="(item, index) in scope.row.choice" :key="index">
-                <p>
-                  text:
-                  {{
-                    item && dialogListArrange[item.messageId]
-                      ? dialogListArrange[item.messageId].txt
-                      : "无"
-                  }}
-                </p>
-                <p>next: {{ item ? item.nextState : "无" }}</p>
-              </div>
-
-              <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">{{
-                  scope.row.choice ? "分支" : "无分支"
-                }}</el-tag>
-              </div>
-            </el-popover>
-            <!-- 结束语句判断 -->
-            <div class="name-wrapper" v-if="scope.row.next">
-              <el-tag size="medium">{{
-                scope.row.next ? "next:" + scope.row.next : ""
-              }}</el-tag>
-            </div>
-          </el-row>
-        </template>
-      </el-table-column>
     </el-table>
-
-    <el-row style="position: absolute; bottom: 5px">
-      <el-row type="flex" style="margin-top: 10px">
-        <el-button @click="addstate" plain icon="el-icon-plus"
-          >新增对话列表</el-button
-        >
-        <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
-        <el-button @click="initdialog" plain icon="el-icon-plus"
-          >初始化对话列表</el-button
-        >
-        <el-button @click="deletedialog" plain icon="el-icon-delete-solid"
-          >删除对话列表</el-button
-        >
-      </el-row>
-    </el-row>
-
     <innerchoose-dialog></innerchoose-dialog>
     <menu-tip :options="options" :stateTip="stateTip"></menu-tip>
   </div>
@@ -84,7 +23,6 @@
 import event from "../../script/tool/event";
 import InnerchooseDialog from "./innerchooseDialog.vue";
 import menuTip from "./menu.vue";
-import { deepClone } from "../../script/tool/tool";
 export default {
   name: "SectionEdit",
 
@@ -187,15 +125,14 @@ export default {
     },
     statesDataArrange: {
       get() {
-        let statesData = deepClone(this.statesData);
+        let statesData = this.statesData;
         let statesDataArrange = [];
         for (let key in statesData) {
           statesData[key].forEach((item) => {
             item["groupName"] = key;
           });
-          statesDataArrange = statesDataArrange.concat(statesData[key]);
+          statesDataArrange.push(statesData[key]);
         }
-
         return statesDataArrange;
       },
     },
@@ -260,10 +197,9 @@ export default {
     },
 
     handleDoubleClick(row, rowevent, column) {
-      console.log(row, "rowd的新哦明显哦");
       let msg = {
         sectionName: this.sectionName,
-        stateGroupName: row.groupName,
+        stateGroupName: this.stateGroupName,
         index: row.row_index,
         // messageId:row.messageId
       };
@@ -277,7 +213,7 @@ export default {
     },
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
-        return "background-color: #fde7aa;color: #000000;height:2px;text-align:center;padding:0";
+        return "background-color: #e3b4b8;color: #000000;height:2px;text-align:center;padding:0";
       }
     },
     tableRowClassName({ row, rowIndex }) {
@@ -290,14 +226,13 @@ export default {
         return;
       }
       this.sectionName = selectName;
-      console.log("statesDataArrange:", this.statesDataArrange);
-      console.log("dialogListArrange:", this.dialogListArrange);
     },
 
     handleClick(tab, event) {
       console.log(tab, event, "顶部选择");
       console.log("sectionListAll:", this.sectionListAll);
       console.log("statesData:", this.statesData);
+      console.log("dialogListArrange:", this.dialogListArrange);
     },
   },
 };
@@ -309,17 +244,13 @@ export default {
   width: 70vw;
 }
 .el-table .warning-row {
-  background: #dd7272;
+  background: rgb(185, 10, 39);
 }
 
 .el-table .success-row {
-  background: #99e4b8;
+  background: #0ed5f0;
 }
 .el-table__body tr.current-row > td {
-  background-color: #c0e4e4 !important;
-}
-
-.el-table--enable-row-hover .el-table__body tr:hover > td {
-  background-color: #acc3ee !important;
+  background-color: #a39696;
 }
 </style>

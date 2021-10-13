@@ -33,7 +33,6 @@
 <script>
 import event from "../../script/tool/event";
 
-import throttle from "../../script/tool/tool";
 export default {
   name: "AsideList",
 
@@ -147,8 +146,8 @@ export default {
   methods: {
     filterTextChange(val) {
       // console.log(val, "新的字");
-      // this.$refs.aside.filter(val);
-      throttle(this.$refs.aside.filter(val), 10000);
+      this.$refs.aside.filter(val);
+      // throttle(this.$refs.aside.filter(val), 10000);
     },
     // 搜索框使用
     filterNode(value, data) {
