@@ -1,5 +1,12 @@
 <template>
   <div id="aside">
+    <el-input
+      placeholder="输入关键字进行过滤"
+      v-model="filterText"
+      size="large"
+      clearable
+      @input="filterTextChange"
+    ></el-input>
     <el-tree
       :data="sectionList"
       :props="defaultProps"
@@ -7,6 +14,7 @@
       :highlight-current="true"
       node-key="id"
       ref="aside"
+      :filter-node-method="filterNode"
     ></el-tree>
     <el-row type="flex" style="margin-top: 10px">
       <el-button @click="addSection" plain icon="el-icon-plus"
@@ -24,6 +32,8 @@
 
 <script>
 import event from "../../script/tool/event";
+
+import throttle from "../../script/tool/tool";
 export default {
   name: "AsideList",
 
@@ -41,6 +51,7 @@ export default {
       inputaddSection: "",
       sectionListAllUpdata: this.$store.getters["section/sectionListGet"],
       sectionListTemp: [],
+      filterText: "",
     };
   },
 
@@ -51,6 +62,16 @@ export default {
     // console.log(this.textConfig,this.sectionList,"textConfig---sectionList---------++++++++++")
   },
   computed: {
+    // filterText: {
+    //   get() {
+    //     // return this.filterText;
+    //   },
+    //   set(val) {
+    //     this.$refs.tree.filter(val);
+    //     // this.filterText = val;
+    //   },
+    // },
+
     textConfig: {
       get() {
         let textConfig = this.$store.getters["configuration/textConfigGet"];
@@ -124,6 +145,18 @@ export default {
     },
   },
   methods: {
+    filterTextChange(val) {
+      // console.log(val, "新的字");
+      // this.$refs.aside.filter(val);
+      throttle(this.$refs.aside.filter(val), 10000);
+    },
+    // 搜索框使用
+    filterNode(value, data) {
+      if (!value) return true;
+      console.log("新的字");
+
+      return data.label.indexOf(value) !== -1;
+    },
     restoreData() {
       let sectionListAll = this.sectionListAll;
 

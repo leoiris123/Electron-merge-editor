@@ -70,10 +70,6 @@
               >
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="nextStates" label="nextStates" width="100">
-          </el-table-column> -->
-          <!--
-          <el-table-column prop="address" label="地址"> </el-table-column>  -->
         </el-table>
       </el-tab-pane>
     </el-tabs>
@@ -302,10 +298,6 @@ export default {
         return;
       }
       this.sectionName = selectName;
-      //   console.log(this.sectionName,"this.sectionName")
-      //   console.log(Object.keys(this.statesData), "<==keys,");
-      //   console.log(Object.values(this.statesData), "<==values,");
-
       console.log(this.statesData, "statesData");
     },
 

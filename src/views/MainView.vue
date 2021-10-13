@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <el-container style="height:100%;weight100%">
-      <el-header height="10%" class="top-list" style="position: relative">
+      <el-header height="10%" class="top-list">
         <el-button @click="dataCombine" type="primary" icon="el-icon-position"
           >导出合并</el-button
         >
@@ -17,13 +17,6 @@
         <el-button plain icon="el-icon-chat-line-round" @click="goDialogView"
           >对白库</el-button
         >
-        <!-- <el-button
-          style="position: absolute; left: 5%; top: 8px"
-          type="primary"
-          icon="el-icon-connection"
-          @click="goDialogView"
-          >数据更新</el-button
-        > -->
       </el-header>
       <el-container>
         <el-aside width="25%">
