@@ -277,7 +277,7 @@ export default {
     },
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
-        return "background-color: #fde7aa;color: #000000;height:2px;text-align:center;padding:0";
+        return "background-color: #7fa5ec;color: #000000;height:2px;text-align:center;padding:0";
       }
     },
     tableRowClassName({ row, rowIndex }) {

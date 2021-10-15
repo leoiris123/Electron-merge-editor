@@ -1,13 +1,23 @@
 <template>
-  <div>
-      
+  <div id="dialog_aside">
+    <el-input
+      class="fixed"
+      placeholder="输入关键字进行过滤"
+      v-model="filterText"
+      size="large"
+      clearable
+      @input="filterTextChange"
+    ></el-input>
     <el-tree
       :data="dialogList"
       :props="defaultProps"
       @node-click="handleNodeClick"
       :highlight-current="true"
+      :render-content="renderContent"
+      :current-node-key="selectName"
       node-key="id"
       ref="aside_dialog"
+      :filter-node-method="filterNode"
     ></el-tree>
     <!-- <button @click="test">test</button> -->
   </div>
@@ -29,36 +39,99 @@ export default {
         label: "label",
       },
       selectName: "",
+      filterText: "",
+      checkdialogEditList: {},
     };
   },
   computed: {
     dialogList: {
       get() {
         let dialogListAll = this.$store.getters["section/dialogListGet"];
-        let dialogList =[]
-      
+        let dialogList = [];
+
         Object.keys(dialogListAll).map((item, index) => {
           let temp = {
-            id: index,
+            id: item,
             label: item,
+            icon: this.checkFlag && this.checkdialogEditGroup[item],
           };
           dialogList.push(temp);
         });
-
+        console.log(this.checkdialogEditGroup, "asdasdasd");
         return dialogList;
       },
     },
+    checkdialogEditGroup: {
+      get() {
+        let checkdialogEditList = Object.keys(this.checkdialogEditList);
+        let dialogListAll = this.$store.getters["section/dialogListGet"];
+        let checkdialogEditGroup = {};
+        for (let key in dialogListAll) {
+          dialogListAll[key];
+          for (let key2 in dialogListAll[key]) {
+            if (checkdialogEditList.indexOf(key2) < 0) {
+              //只要有一条没配好
+              checkdialogEditGroup[key] = true;
+            }
+          }
+        }
+        return checkdialogEditGroup;
+      },
+    },
+    // top: {
+    //   get() {},
+    // },
   },
-  mounted() {},
+  mounted() {
+    console.log(this.checkdialogEditGroup, "a11111sdasdasd");
+    event.$on("checkdialogEditList", (checkdialogEditList) => {
+      this.checkdialogEditList = checkdialogEditList;
+      this.checkFlag = true;
+
+      // console.log(
+      //   this.$refs.aside_dialog.getCurrentKey(),
+      //   "this.$refs.aside_dialog.getCurrentKey()"
+      // );
+      // setCurrentKey
+      // this.$refs.aside_dialog.setCheckedNodes([this.selectName], true);
+      console.log(this.selectName, "this.selectName");
+    });
+  },
 
   methods: {
-      test(){
-          console.log(this.dialogList, "this.dialogList");
-      },
+    renderContent(h, { node, data, store }) {
+      console.log(data.icon, "icon");
+      // v-show={!checkdialogEditGroup[node.label]}
+      return (
+        <span class="quest-item">
+          <i
+            v-show={data.icon === true}
+            class="header-icon el-icon-info"
+            style="color: red"
+          ></i>
+          {node.label}
+        </span>
+      );
+    },
+    filterTextChange(val) {
+      this.$refs.aside_dialog.filter(val);
+      // throttle(this.$refs.aside.filter(val), 10000);
+    },
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    test() {
+      console.log(this.dialogList, "this.dialogList");
+    },
     handleNodeClick(data) {
-      //   console.log(data.label, "当前选择的selectName");
+      console.log(data.label, "当前选择的selectName");
       this.selectName = data.label;
       event.$emit("selectDialogNameChange", this.selectName);
+      // console.log(this.$refs.aside_dialog.setCheckedNodes, "setCheckedNodes");
+      // let top = document.querySelector(".fixed");
+
+      // console.log(top, top.getBoundingClientRect().top, "top.scrollTop");
       //   event.$on("countListObjChange", this.countListObjChange);
       //   let sectionListAll = this.$store.getters["section/sectionListGet"];
       //   let sectionName = Object.keys(sectionListAll);
@@ -76,5 +149,12 @@ export default {
 .el-tree-node__label {
   font-size: 14px;
   line-height: 14px;
+}
+#dialog_aside {
+  height: 85vh;
+}
+.fixed {
+  position: fixed;
+  // top: ;
 }
 </style>

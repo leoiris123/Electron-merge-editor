@@ -145,15 +145,12 @@ export default {
   },
   methods: {
     filterTextChange(val) {
-      // console.log(val, "新的字");
       this.$refs.aside.filter(val);
       // throttle(this.$refs.aside.filter(val), 10000);
     },
     // 搜索框使用
     filterNode(value, data) {
       if (!value) return true;
-      console.log("新的字");
-
       return data.label.indexOf(value) !== -1;
     },
     restoreData() {

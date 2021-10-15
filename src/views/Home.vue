@@ -236,7 +236,7 @@ body > .el-container {
   line-height: 320px;
 }
 .top-list {
-  background-color: #f1bcd7;
+  background-color: #8cd4eb;
 }
 /* -------- */
 // .g-container
@@ -245,7 +245,7 @@ body > .el-container {
 
 /* @import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200&display=swap'); */
 
-$str: "别催了，我正在！！正在全速加载加载！！！";
+$str: "上班了我好开心啊啊啊！！！";
 $length: str-length($str);
 $n: 50;
 $animationTime: 3;
@@ -313,7 +313,7 @@ p {
 
   p:nth-child(#{$i})::before {
     content: $content;
-    color: rgb(231, 5, 73);
+    color: rgb(48, 160, 194);
     text-shadow: 0 0 1px #fff, 0 0 2px #fff, 0 0 5px currentColor,
       0 0 10px currentColor;
     animation: typing-#{$i}

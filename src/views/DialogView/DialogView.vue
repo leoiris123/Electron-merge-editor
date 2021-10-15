@@ -1,11 +1,13 @@
 <template>
   <div class="dialog-view">
     <el-container style="height:100%;weight100%">
-      <el-header height="10%">
-         <el-button @click="saveAllDialog" type="primary" plain>保存全部</el-button>
+      <el-header height="6%">
+        <el-button @click="saveAllDialog" type="primary" plain
+          >保存全部</el-button
+        >
       </el-header>
       <el-container>
-        <el-aside width="30%">
+        <el-aside width="20%">
           <asidedialog-list></asidedialog-list>
         </el-aside>
         <el-main>
@@ -25,7 +27,7 @@ import DialogEdit from "@/components/DialogEdit.vue";
 export default {
   name: "DialogView",
 
-  components: { BackBtn, AsidedialogList,DialogEdit },
+  components: { BackBtn, AsidedialogList, DialogEdit },
 
   directives: {},
 
@@ -36,9 +38,9 @@ export default {
   mounted() {},
 
   methods: {
-    saveAllDialog(){
-        event.$emit("saveAllDialog", this.selectName);
-    }
+    saveAllDialog() {
+      event.$emit("saveAllDialog", this.selectName);
+    },
   },
 };
 </script>
@@ -53,27 +55,25 @@ export default {
 }
 .el-header,
 .el-footer {
-  background-color: #b3c0d1;
+  background-color: #8195b9;
   color: #333;
   text-align: center;
-  line-height: 60px;
+  line-height: 6vh;
 }
 
 .el-aside {
   background-color: #d3dce6;
   color: #333;
   text-align: center;
-  line-height: 300px;
 }
 
 .el-main {
   background-color: #e9eef3;
   color: #333;
-  // text-align: center;
-  /* line-height: 160px; */
+  padding: 0;
 }
 
-body > .el-container {
-  margin-bottom: 40px;
-}
+// body > .el-container {
+//   // margin-bottom: 40px;
+// }
 </style>
