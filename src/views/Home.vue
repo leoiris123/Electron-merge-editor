@@ -28,6 +28,7 @@
 <script>
 import { PATH_CONFIG } from "../../script/config/config.js";
 import { loader } from "../../script/load/load.js";
+import event from "../../script/tool/event.js";
 const { dialog } = window.require("electron").remote;
 const fs = window.require("fs");
 import ContextMenu from "../../script/tool/menu.js";
@@ -47,7 +48,7 @@ export default {
       this.rootPath = rootPath;
     }
     this.finddirList();
-    // this.customMenu(); //测试自定义菜单
+    this.customMenu(); //测试自定义菜单
   },
   computed: {},
   methods: {
@@ -142,21 +143,9 @@ export default {
         const menuSinglton = ContextMenu({
           menus: [
             {
-              name: "测试自定义",
+              name: "测试:为什么不问问神奇的L呢",
               onClick: function (e) {
                 console.log("menu1 clicked");
-              },
-            },
-            {
-              name: "贝克汉姆·雷",
-              onClick: function (e) {
-                console.log("menu2 clicked");
-              },
-            },
-            {
-              name: "莱昂纳多·雷",
-              onClick: function (e) {
-                console.log("menu3 clicked");
               },
             },
           ],
@@ -180,6 +169,9 @@ export default {
         }
       };
     },
+  },
+  beforeDestroy() {
+    document.body.onmouseup = null;
   },
   beforeRouteEnter(to, from, next) {
     console.log("to,from", to, from);

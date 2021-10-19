@@ -2,10 +2,25 @@
   <div>
     <div ref="box" class="box"></div>
     <!-- <button @click="test">test</button> -->
-    <el-row>
-      <el-button plain @click="dialogHandle(1)">展开全部</el-button
-      ><el-button plain @click="dialogHandle(0)">折叠全部</el-button></el-row
-    >
+    <div style="position: relative">
+      <el-button type="info" style="left: 0; position: absolute"
+        >{{ selectDialogGroupName }} :</el-button
+      >
+    </div>
+
+    <el-button
+      type="warning"
+      @click="dialogHandle(1)"
+      icon="el-icon-caret-bottom"
+      circle
+    ></el-button>
+    <el-button
+      type="danger"
+      @click="dialogHandle(0)"
+      icon="el-icon-caret-top"
+      circle
+    ></el-button>
+
     <div class="dialog_body">
       <div class="dialog_edit">
         <el-collapse v-model="currentName" @change="handleChange">
@@ -131,7 +146,27 @@
                       </el-select>
                     </el-row>
                   </el-row>
-
+                  <!--  轴坐标 -->
+                  <el-row type="flex">
+                    <el-input
+                      type="number"
+                      size="mini"
+                      @input="handleSelectChange"
+                      placeholder="x坐标"
+                      clearable
+                      v-model="dialogEditList[item.id][character].x"
+                    >
+                    </el-input>
+                    <el-input
+                      type="number"
+                      size="mini"
+                      clearable
+                      @input="handleSelectChange"
+                      placeholder="y坐标"
+                      v-model="dialogEditList[item.id][character].y"
+                    >
+                    </el-input>
+                  </el-row>
                   <!--  -->
                   <el-row type="flex">
                     <el-col style="min-height: 15px">
@@ -294,7 +329,7 @@ export default {
     //红点系统数据
     checkdialogEditList: {
       get() {
-        let checkdialogEditListBase = deepClone(this.dialogEditList);
+        let checkdialogEditListBase = this.dialogEditList;
         let checkdialogEditList = {};
         for (let key in checkdialogEditListBase) {
           this.characterList.forEach((itemchar) => {
@@ -317,6 +352,7 @@ export default {
   mounted() {
     event.$on("selectDialogNameChange", (selectDialogGroupName) => {
       this.selectDialogGroupName = selectDialogGroupName;
+      console.log(this.selectDialogGroupName);
       console.log(this.selectDialogGroupName, "this.selectDialogGroupName");
     });
     event.$on("saveAllDialog", () => {
@@ -337,6 +373,7 @@ export default {
       // };
       this.handleQuick(character, config).then((res) => {
         this.$message.success(character + "数据应用成功");
+        this.handleSelectChange();
       });
     },
     handleQuick(character, config) {
@@ -344,7 +381,6 @@ export default {
         for (let key in this.selectGroupData) {
           this.dialogEditList[key][character] = deepClone(config);
         }
-        this.handleSelectChange();
         resolve("success");
       });
     },
@@ -431,7 +467,7 @@ export default {
   flex: 1;
   border: 1px dotted rgb(138, 125, 125);
 
-  max-height: 19vh;
+  max-height: 22vh;
   position: relative;
 }
 .vertical {

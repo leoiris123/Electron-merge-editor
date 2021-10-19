@@ -46,15 +46,14 @@ export default {
 
   mounted() {
     this.node = document.body.querySelector("#menu_tip");
-
     // console.log("父组件");
     this.createTip();
   },
-  watch: {
-    stateTip(val) {
-      console.log(" stateTip:", val);
-    },
-  },
+  // watch: {
+  //   // stateTip(val) {
+  //   //   console.log(" stateTip:", val);
+  //   // },
+  // },
   methods: {
     createTip() {},
   },
@@ -70,14 +69,20 @@ div {
 }
 ul {
   list-style-type: none;
-  padding: 0;
+  padding: 3px;
   margin: 0;
-  /* display: inline-block; */
+  border-radius: 7px;
+  background-color: teal;
 }
 .li_item {
-  /* display: inline-block; */
+  padding: 1px 1px;
+  /* border-bottom: red 1px solid; */
+}
+.li_item:not(:last-child) {
+  border-bottom: red 1px solid;
 }
 .tip_ul {
   position: absolute;
+  z-index: 10;
 }
 </style>

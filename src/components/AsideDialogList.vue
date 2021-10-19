@@ -17,6 +17,7 @@
       :current-node-key="selectName"
       node-key="id"
       ref="aside_dialog"
+      class="dialog_aside_main"
       :filter-node-method="filterNode"
     ></el-tree>
     <!-- <button @click="test">test</button> -->
@@ -44,23 +45,6 @@ export default {
     };
   },
   computed: {
-    dialogList: {
-      get() {
-        let dialogListAll = this.$store.getters["section/dialogListGet"];
-        let dialogList = [];
-
-        Object.keys(dialogListAll).map((item, index) => {
-          let temp = {
-            id: item,
-            label: item,
-            icon: this.checkFlag && this.checkdialogEditGroup[item],
-          };
-          dialogList.push(temp);
-        });
-        console.log(this.checkdialogEditGroup, "asdasdasd");
-        return dialogList;
-      },
-    },
     checkdialogEditGroup: {
       get() {
         let checkdialogEditList = Object.keys(this.checkdialogEditList);
@@ -78,30 +62,40 @@ export default {
         return checkdialogEditGroup;
       },
     },
+    dialogList: {
+      get() {
+        let dialogListAll = this.$store.getters["section/dialogListGet"];
+        let dialogList = [];
+
+        Object.keys(dialogListAll).map((item, index) => {
+          let temp = {
+            id: item,
+            label: item,
+            icon: this.checkdialogEditGroup[item] && this.checkFlag,
+          };
+          dialogList.push(temp);
+        });
+        console.log("asd");
+        return dialogList;
+      },
+    },
     // top: {
     //   get() {},
     // },
   },
+
   mounted() {
     console.log(this.checkdialogEditGroup, "a11111sdasdasd");
     event.$on("checkdialogEditList", (checkdialogEditList) => {
       this.checkdialogEditList = checkdialogEditList;
       this.checkFlag = true;
-
-      // console.log(
-      //   this.$refs.aside_dialog.getCurrentKey(),
-      //   "this.$refs.aside_dialog.getCurrentKey()"
-      // );
       // setCurrentKey
-      // this.$refs.aside_dialog.setCheckedNodes([this.selectName], true);
-      console.log(this.selectName, "this.selectName");
+      // console.log(this.selectName, "this.selectName");
     });
   },
 
   methods: {
     renderContent(h, { node, data, store }) {
-      console.log(data.icon, "icon");
-      // v-show={!checkdialogEditGroup[node.label]}
       return (
         <span class="quest-item">
           <i
@@ -128,6 +122,12 @@ export default {
       console.log(data.label, "当前选择的selectName");
       this.selectName = data.label;
       event.$emit("selectDialogNameChange", this.selectName);
+      // if (this.$refs.aside_dialog && this.$refs.aside_dialog.getCurrentKey()) {
+      //   this.$refs.aside_dialog.setCheckedKeys(
+      //     this.$refs.aside_dialog.getCurrentKey(),
+      //     true
+      //   );
+      // }
       // console.log(this.$refs.aside_dialog.setCheckedNodes, "setCheckedNodes");
       // let top = document.querySelector(".fixed");
 
@@ -142,16 +142,20 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #f06060 !important;
-}
+<style lang="scss" >
+// .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+//   background-color: #f06060 !important;
+// }
 .el-tree-node__label {
   font-size: 14px;
   line-height: 14px;
 }
 #dialog_aside {
   height: 85vh;
+}
+.dialog_aside_main {
+  height: 89vh;
+  overflow: scroll;
 }
 .fixed {
   position: fixed;

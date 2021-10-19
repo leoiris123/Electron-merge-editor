@@ -10,12 +10,14 @@
       @row-dblclick="handleDoubleClick"
       show-overflow-tooltip
       :header-cell-style="tableHeaderColor"
+      :cell-class-name="cellClassName"
       :data="statesDataArrange"
+      @row-contextmenu="menuShow"
       style="width: 100%"
     >
       <el-table-column prop="groupName" label="group" width="80">
       </el-table-column>
-      <el-table-column prop="messageId" label="messageId" width="730">
+      <el-table-column prop="messageId" label="messageId" min-width="730">
         <template slot-scope="scope">
           <div>
             {{
@@ -26,36 +28,27 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="choice" width="200">
-        <template slot-scope="scope">
-          <el-row type="flex">
-            <!-- 分支语句判断 -->
-            <el-popover v-if="scope.row.choice" trigger="hover" placement="top">
-              <div v-for="(item, index) in scope.row.choice" :key="index">
-                <p>
-                  text:
-                  {{
-                    item && dialogListArrange[item.messageId]
-                      ? dialogListArrange[item.messageId].txt
-                      : "无"
-                  }}
-                </p>
-                <p>next: {{ item ? item.nextState : "无" }}</p>
-              </div>
 
-              <div slot="reference" class="name-wrapper">
-                <el-tag size="medium">{{
-                  scope.row.choice ? "分支" : "无分支"
-                }}</el-tag>
-              </div>
-            </el-popover>
-            <!-- 结束语句判断 -->
-            <div class="name-wrapper" v-if="scope.row.next">
-              <el-tag size="medium">{{
-                scope.row.next ? "next:" + scope.row.next : ""
-              }}</el-tag>
-            </div>
-          </el-row>
+      <el-table-column label="choice" max-width="550" min-width="350">
+        <template slot-scope="scope">
+          <div v-for="(item, index) in scope.row.choice" :key="index">
+            <el-row type="flex">
+              <p style="margin: 3px">
+                text:
+                {{
+                  item && dialogListArrange[item.messageId]
+                    ? dialogListArrange[item.messageId].txt
+                    : "无"
+                }}
+              </p>
+              <p style="margin: 3px">
+                nextTo: {{ item ? item.nextState : "无" }}
+              </p>
+            </el-row>
+          </div>
+          <el-tag v-if="scope.row.next" size="medium">{{
+            scope.row.next ? "next:" + scope.row.next : ""
+          }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -105,22 +98,40 @@ export default {
       inputadddialog: "",
       options: [
         {
-          name: "测试自定义",
-          onClick: function (e) {
-            console.log("menu1 clicked");
-          },
+          name: "新增",
+          onClick: this.tipClick("add_normal"),
         },
         {
-          name: "贝克汉姆·雷",
-          onClick: function (e) {
-            console.log("menu2 clicked");
-          },
+          name: "删除",
+          onClick: this.tipClick("delete_normal"),
         },
         {
-          name: "莱昂纳多·雷",
-          onClick: function (e) {
-            console.log("menu3 clicked");
-          },
+          name: "替换",
+          onClick: this.tipClick("replace_normal"),
+        },
+        {
+          name: "添加新分支",
+          onClick: this.tipClick("add_choice"),
+        },
+        {
+          name: "添加next",
+          onClick: this.tipClick("add_next"),
+        },
+        {
+          name: "添加分组",
+          onClick: this.tipClick("add_group"),
+        },
+        {
+          name: "删除分支",
+          onClick: this.tipClick("delete_choice"),
+        },
+        {
+          name: "删除next",
+          onClick: this.tipClick("delete_next"),
+        },
+        {
+          name: "删除分组",
+          onClick: this.tipClick("delete_group"),
         },
       ],
       stateTip: {
@@ -132,17 +143,14 @@ export default {
       },
     };
   },
-  beforeDestroy() {
-    document.querySelector(".sectionEdit").onmouseup = null;
-  },
+  beforeDestroy() {},
   mounted() {
     event.$on("selectNameChange", this.selectNameChange);
     event.$on("sectionChange", (val) => {
       this.sectionListAll = val;
     });
     document.querySelector(".sectionEdit").onmouseup = (e) => {
-      console.log("E", e);
-
+      // console.log("E", e);
       if (e.button == 2) {
         this.stateTip = {
           state: true,
@@ -152,13 +160,16 @@ export default {
           },
         };
       } else {
-        this.stateTip = {
-          state: false,
-          pos: {
-            x: e.clientX,
-            y: e.clientY,
-          },
-        };
+        //确保自定义tip的事件被触发
+        setTimeout(() => {
+          this.stateTip = {
+            state: false,
+            pos: {
+              x: e.clientX,
+              y: e.clientY,
+            },
+          };
+        }, 0);
       }
     };
   },
@@ -209,6 +220,47 @@ export default {
   },
 
   methods: {
+    tipClick(type) {
+      //返回函数
+      return () => {
+        console.log("type:", type);
+        switch (type) {
+          case "add_normal":
+            console.log("self_type:", type);
+            break;
+          case "delete_normal":
+            console.log("self_type:", type);
+            break;
+          case "replace_normal":
+            console.log("self_type:", type);
+            break;
+          case "add_choicel":
+            console.log("self_type:", type);
+            break;
+          case "add_next":
+            console.log("self_type:", type);
+            break;
+          case "add_group":
+            console.log("self_type:", type);
+            break;
+          case "delete_choice":
+            console.log("self_type:", type);
+            break;
+          case "delete_next":
+            console.log("self_type:", type);
+            break;
+          case "delete_group":
+            console.log("self_type:", type);
+            break;
+          default:
+            console.warn("default:未知命令");
+            break;
+        }
+      };
+    },
+    menuShow(row, column, e) {
+      console.log("row, column, event", row, column, e);
+    },
     deletedialog() {
       console.log(this.stateGroupName, "this.stateGroupName");
       let sectionName = this.sectionName;
@@ -238,6 +290,18 @@ export default {
       }
       console.log(sectionName, selectStateName, "**");
     },
+    cellClassName({ row, column, rowIndex, columnIndex }) {
+      console.log("{row, column, rowIndex, columnIndex}", {
+        row,
+        column,
+        rowIndex,
+        columnIndex,
+      });
+
+      if (columnIndex == 2) {
+        return "column_choice";
+      }
+    },
     addstate() {
       let inputaddstate = this.inputaddstate;
       let sectionName = this.sectionName;
@@ -249,6 +313,7 @@ export default {
         };
         this.$store.dispatch("section/UPDATA_SECTION", msg);
       }
+      this.$forceUpdate();
     },
     setCurrent(row) {
       this.$refs.singleTable.setCurrentRow(row);
@@ -260,7 +325,6 @@ export default {
     },
 
     handleDoubleClick(row, rowevent, column) {
-      console.log(row, "rowd的新哦明显哦");
       let msg = {
         sectionName: this.sectionName,
         stateGroupName: row.groupName,
@@ -283,15 +347,16 @@ export default {
     tableRowClassName({ row, rowIndex }) {
       row.row_index = rowIndex;
 
-      //   console.log(row, rowIndex, "row,rowIndex");
+      // console.log(row, rowIndex, "row,rowIndex");
+      return `group_${row.groupName}`;
     },
     selectNameChange(selectName) {
       if (!selectName) {
         return;
       }
       this.sectionName = selectName;
-      console.log("statesDataArrange:", this.statesDataArrange);
-      console.log("dialogListArrange:", this.dialogListArrange);
+      // console.log("statesDataArrange:", this.statesDataArrange);
+      // console.log("dialogListArrange:", this.dialogListArrange);
     },
 
     handleClick(tab, event) {
@@ -306,7 +371,10 @@ export default {
 <style lang="scss">
 .sectionEdit {
   height: 100%;
-  width: 70vw;
+  width: 100%;
+  max-height: 90vh;
+  overflow: scroll;
+  background-color: rgb(248, 228, 228);
 }
 .el-table .warning-row {
   background: #dd7272;
@@ -316,10 +384,42 @@ export default {
   background: #99e4b8;
 }
 .el-table__body tr.current-row > td {
-  background-color: #c0e4e4 !important;
+  background-color: #e46274 !important;
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover > td {
-  background-color: #acc3ee !important;
+  background-color: #f1bed8 !important;
+}
+
+// 分组颜色设置
+.group_1 {
+  background-color: #8addb9 !important;
+}
+.group_2 {
+  background-color: #85b7e9 !important;
+}
+.group_3 {
+  background-color: #ffb5b5 !important;
+}
+.group_4 {
+  background-color: #ffd0ff !important;
+}
+.group_5 {
+  background-color: #ecde95 !important;
+}
+.group_6 {
+  background-color: #6fb7b7 !important;
+}
+.group_7 {
+  background-color: #e48a8a !important;
+}
+.group_8 {
+  background-color: #639450 !important;
+}
+.group_9 {
+  background-color: #735db1 !important;
+}
+.column_choice {
+  padding: 0;
 }
 </style>

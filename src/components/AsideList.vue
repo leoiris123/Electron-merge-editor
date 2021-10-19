@@ -14,6 +14,7 @@
       :highlight-current="true"
       node-key="id"
       ref="aside"
+      class="aside_main"
       :filter-node-method="filterNode"
     ></el-tree>
     <el-row type="flex" style="margin-top: 10px">
@@ -58,19 +59,8 @@ export default {
     event.$on("sectionChange", (val) => {
       this.sectionListAll = val;
     });
-    // console.log(this.textConfig,this.sectionList,"textConfig---sectionList---------++++++++++")
   },
   computed: {
-    // filterText: {
-    //   get() {
-    //     // return this.filterText;
-    //   },
-    //   set(val) {
-    //     this.$refs.tree.filter(val);
-    //     // this.filterText = val;
-    //   },
-    // },
-
     textConfig: {
       get() {
         let textConfig = this.$store.getters["configuration/textConfigGet"];
@@ -196,13 +186,13 @@ export default {
     },
     handleNodeClick(data) {
       let sectionListAll = this.$store.getters["section/sectionListGet"];
-      console.log(this.textConfig, "-textConfig");
+      // console.log(this.textConfig, "-textConfig");
 
-      console.log(
-        sectionListAll,
-        Object.keys(sectionListAll),
-        "-sectionListAll"
-      );
+      // console.log(
+      //   sectionListAll,
+      //   Object.keys(sectionListAll),
+      //   "-sectionListAll"
+      // );
       this.selectName = data.sectionName;
       event.$emit("selectNameChange", this.selectName);
 
@@ -216,13 +206,21 @@ export default {
 
 <style lang="scss">
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-  background-color: #f06060 !important;
+  background-color: #8fc5e9 !important;
 }
 .el-tree-node__label {
   font-size: 14px;
   line-height: 14px;
 }
 #aside {
-  height: 85vh;
+  height: 94vh;
+  // overflow: scroll;
+}
+.aside_main {
+  height: 78vh;
+  overflow: scroll;
+}
+.el-tree-node.is-current.is-focusable {
+  background: rgb(157, 203, 228) !important;
 }
 </style>
