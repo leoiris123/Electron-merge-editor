@@ -19,7 +19,7 @@
         >
       </el-header>
       <el-container>
-        <el-aside width="25%">
+        <el-aside style="width: auto" max-width="25%">
           <aside-list></aside-list>
         </el-aside>
         <el-container>
@@ -222,6 +222,7 @@ export default {
   color: #333;
   text-align: center;
   line-height: 60px;
+  /* width:; */
 }
 
 .el-aside {

@@ -15,9 +15,12 @@
       @row-contextmenu="menuShow"
       style="width: 100%"
     >
-      <el-table-column prop="groupName" label="group" width="80">
+      <el-table-column prop="groupName" label="GROUP" width="75">
+        <template slot-scope="scope">
+          <div style="text-align: center">{{ scope.row.groupName }}</div>
+        </template>
       </el-table-column>
-      <el-table-column prop="messageId" label="messageId" min-width="730">
+      <el-table-column prop="messageId" label="MESSAGE_ID" min-width="730">
         <template slot-scope="scope">
           <div>
             {{
@@ -29,11 +32,18 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="choice" max-width="550" min-width="350">
+      <el-table-column label="CHOICE" max-width="550" min-width="350">
         <template slot-scope="scope">
           <div v-for="(item, index) in scope.row.choice" :key="index">
-            <el-row type="flex">
-              <p style="margin: 3px">
+            <el-row :class="handleColumnClass(item.nextState)" type="flex">
+              <p
+                style="
+                  margin: 3px;
+                  line-height: 18px;
+                  max-width: 70%;
+                  text-overflow: ellipsis;
+                "
+              >
                 text:
                 {{
                   item && dialogListArrange[item.messageId]
@@ -41,32 +51,28 @@
                     : "无"
                 }}
               </p>
-              <p style="margin: 3px">
+              <p
+                style="margin: 3px; line-height: 18px; text-overflow: ellipsis"
+              >
                 nextTo: {{ item ? item.nextState : "无" }}
               </p>
             </el-row>
           </div>
-          <el-tag v-if="scope.row.next" size="medium">{{
-            scope.row.next ? "next:" + scope.row.next : ""
-          }}</el-tag>
+          <div
+            style="
+              height: 48px;
+              font-size: 18px;
+              line-height: 48px;
+              text-align: center;
+            "
+            :class="handleColumnClass(scope.row.next)"
+            v-if="scope.row.next"
+          >
+            {{ scope.row.next ? "next:" + scope.row.next : "" }}
+          </div>
         </template>
       </el-table-column>
     </el-table>
-
-    <el-row style="position: absolute; bottom: 5px">
-      <el-row type="flex" style="margin-top: 10px">
-        <el-button @click="addstate" plain icon="el-icon-plus"
-          >新增对话列表</el-button
-        >
-        <el-input v-model="inputaddstate" placeholder="请输入内容"></el-input>
-        <el-button @click="initdialog" plain icon="el-icon-plus"
-          >初始化对话列表</el-button
-        >
-        <el-button @click="deletedialog" plain icon="el-icon-delete-solid"
-          >删除对话列表</el-button
-        >
-      </el-row>
-    </el-row>
 
     <innerchoose-dialog></innerchoose-dialog>
     <menu-tip :options="options" :stateTip="stateTip"></menu-tip>
@@ -78,6 +84,7 @@ import event from "../../script/tool/event";
 import InnerchooseDialog from "./innerchooseDialog.vue";
 import menuTip from "./menu.vue";
 import { deepClone } from "../../script/tool/tool";
+import { throttle } from "../../script/tool/tool";
 export default {
   name: "SectionEdit",
 
@@ -141,6 +148,7 @@ export default {
           y: 0,
         },
       },
+      msg: null,
     };
   },
   beforeDestroy() {},
@@ -179,7 +187,7 @@ export default {
         return this.$store.getters["section/sectionListGet"];
       },
       set(val) {
-        console.log("*/**/********");
+        // console.log("==>>section页面数据更新");
       },
     },
     statesData: {
@@ -220,46 +228,83 @@ export default {
   },
 
   methods: {
+    handleColumnClass(val) {
+      if (val) {
+        return `group_${val}`;
+      }
+    },
     tipClick(type) {
       //返回函数
       return () => {
         console.log("type:", type);
+        console.log("this.msg:", this.msg);
+        if (!this.msg && type !== "add_group") {
+          return;
+        }
+        if (!this.msg && type == "add_group") {
+          this.msg = {
+            sectionName: this.sectionName,
+          };
+        }
+        this.msg.type = type;
+
+        let msg = this.msg;
+
         switch (type) {
           case "add_normal":
+            //
             console.log("self_type:", type);
+            throttle(event.$emit("innerchooseDialog", this.msg), 1000);
             break;
           case "delete_normal":
+            this.$store.dispatch("section/UPDATA_SECTION", msg);
             console.log("self_type:", type);
             break;
           case "replace_normal":
+            throttle(event.$emit("innerchooseDialog", this.msg), 1000);
             console.log("self_type:", type);
             break;
-          case "add_choicel":
+          case "add_choice":
+            throttle(event.$emit("innerchooseDialog", this.msg), 1000);
             console.log("self_type:", type);
             break;
           case "add_next":
+            throttle(event.$emit("innerchooseDialog", this.msg), 1000);
             console.log("self_type:", type);
             break;
           case "add_group":
+            throttle(event.$emit("innerchooseDialog", this.msg), 1000);
             console.log("self_type:", type);
             break;
           case "delete_choice":
+            this.$store.dispatch("section/UPDATA_SECTION", msg);
             console.log("self_type:", type);
             break;
           case "delete_next":
+            this.$store.dispatch("section/UPDATA_SECTION", msg);
             console.log("self_type:", type);
             break;
           case "delete_group":
             console.log("self_type:", type);
+            this.$store.dispatch("section/UPDATA_SECTION", msg);
             break;
           default:
             console.warn("default:未知命令");
             break;
         }
+        // this.$store.dispatch("section/UPDATA_SECTION", msg);
+        this.msg = null; //清空数据
       };
     },
     menuShow(row, column, e) {
-      console.log("row, column, event", row, column, e);
+      // console.log("row, column, event", row, column, e);
+      //创建tip需要的信息
+      let msg = {
+        sectionName: this.sectionName,
+        groupName: row.groupName,
+        messageId: row.messageId,
+      };
+      this.msg = msg;
     },
     deletedialog() {
       console.log(this.stateGroupName, "this.stateGroupName");
@@ -271,7 +316,6 @@ export default {
           sectionName: sectionName,
           selectStateName: selectStateName,
         };
-
         this.$store.dispatch("section/UPDATA_SECTION", msg);
       }
     },
@@ -288,18 +332,18 @@ export default {
 
         this.$store.dispatch("section/UPDATA_SECTION", msg);
       }
-      console.log(sectionName, selectStateName, "**");
+      // console.log(sectionName, selectStateName, "**");
     },
     cellClassName({ row, column, rowIndex, columnIndex }) {
-      console.log("{row, column, rowIndex, columnIndex}", {
-        row,
-        column,
-        rowIndex,
-        columnIndex,
-      });
+      // console.log("{row, column, rowIndex, columnIndex}", {
+      //   row,
+      //   column,
+      //   rowIndex,
+      //   columnIndex,
+      // });
 
       if (columnIndex == 2) {
-        return "column_choice";
+        return `column_choice`;
       }
     },
     addstate() {
@@ -325,19 +369,22 @@ export default {
     },
 
     handleDoubleClick(row, rowevent, column) {
-      let msg = {
-        sectionName: this.sectionName,
-        stateGroupName: row.groupName,
-        index: row.row_index,
-        // messageId:row.messageId
-      };
+      // let msg = {
+      //   sectionName: this.sectionName,
+      //   stateGroupName: row.groupName,
+      //   index: row.row_index,
+      //   // messageId:row.messageId
+      // };
       // event.$emit("OpenOrderList", msg);
-      event.$emit("innerchooseDialog", msg);
+
+      console.log("sectionListAll:", this.sectionListAll);
+      console.log("statesData:", this.statesData);
+      throttle(event.$emit("innerchooseDialog", this.msg), 1000);
 
       //   console.log(row, event, column, "DoubleClick==>row, event, column");
     },
     handleRowClick(row, event, column) {
-      console.log(row, this.activeIndex, "Click==>row,this.activeIndex");
+      // console.log(row, this.activeIndex, "Click==>row,this.activeIndex");
     },
     tableHeaderColor({ row, column, rowIndex, columnIndex }) {
       if (rowIndex === 0) {
@@ -346,7 +393,6 @@ export default {
     },
     tableRowClassName({ row, rowIndex }) {
       row.row_index = rowIndex;
-
       // console.log(row, rowIndex, "row,rowIndex");
       return `group_${row.groupName}`;
     },
@@ -359,11 +405,7 @@ export default {
       // console.log("dialogListArrange:", this.dialogListArrange);
     },
 
-    handleClick(tab, event) {
-      console.log(tab, event, "顶部选择");
-      console.log("sectionListAll:", this.sectionListAll);
-      console.log("statesData:", this.statesData);
-    },
+    handleClick(tab, event) {},
   },
 };
 </script>
@@ -384,7 +426,7 @@ export default {
   background: #99e4b8;
 }
 .el-table__body tr.current-row > td {
-  background-color: #e46274 !important;
+  background-color: #dd7b86 !important;
 }
 
 .el-table--enable-row-hover .el-table__body tr:hover > td {
@@ -420,6 +462,16 @@ export default {
   background-color: #735db1 !important;
 }
 .column_choice {
-  padding: 0;
+  padding: 0 !important;
+  margin: 0 !important;
+  // background-color: #fefeff !important;
+}
+.td {
+  padding: 0 !important;
+}
+.el-table .cell,
+.el-table--border td:first-child .cell,
+.el-table--border th:first-child .cell {
+  padding: 0 !important;
 }
 </style>

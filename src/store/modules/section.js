@@ -64,52 +64,64 @@ const mutations = {
     console.log("state.dialogListArrange:", data)
   },
   [UPDATA_SECTION_LIST](state, data) {
-    if (data.type == "modify_normal") {
-      state.sectionList[data.sectionName].states[data.stateGroupName][
-        data.index
-      ].messageId = data.messageId;
-    }
-    if (data.type == "add_normal") {
-      state.sectionList[data.sectionName].states[data.stateGroupName].splice(
-        data.index + 1,
-        0,
-        {
-          messageId: data.messageId,
-        }
-      );
-    }
-    if (data.type == "delete_normal") {
-      state.sectionList[data.sectionName].states[data.stateGroupName].splice(
-        data.index,
-        1
-      );
-    }
-    if (data.type == "add_branch") {
-      let currentid = state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
-      if (currentid["choice"]) {
-        currentid["choice"].push(data.choice)
-      } else {
-        currentid["choice"] = []
-        currentid["choice"].push(data.choice)
-      }
-      // ["choice"] = data.choice;
-      console.log(
-        state.sectionList[data.sectionName].states[data.stateGroupName],
-        "state.sectionList[data.sectionName].states[data.stateGroupName]"
-      );
-    }
-    if (data.type == "add_next") {
-      state.sectionList[data.sectionName].states[data.stateGroupName][
-        data.index
-      ]["next"] = data.next;
-    }
-    if (data.type == "delete_next") {
-      delete state.sectionList[data.sectionName].states[data.stateGroupName][
-        data.index
-      ]["next"];
-    }
-    console.log(data, "执行了==>UPDATA_SECTION_LIST");
-    event.$emit("sectionChange", state.sectionList);
+
+
+
+
+
+
+
+
+
+
+
+
+    // if (data.type == "modify_normal") {
+    //   state.sectionList[data.sectionName].states[data.stateGroupName][
+    //     data.index
+    //   ].messageId = data.messageId;
+    // }
+    // if (data.type == "add_normal") {
+    //   state.sectionList[data.sectionName].states[data.stateGroupName].splice(
+    //     data.index + 1,
+    //     0,
+    //     {
+    //       messageId: data.messageId,
+    //     }
+    //   );
+    // }
+    // if (data.type == "delete_normal") {
+    //   state.sectionList[data.sectionName].states[data.stateGroupName].splice(
+    //     data.index,
+    //     1
+    //   );
+    // }
+    // if (data.type == "add_branch") {
+    //   let currentid = state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
+    //   if (currentid["choice"]) {
+    //     currentid["choice"].push(data.choice)
+    //   } else {
+    //     currentid["choice"] = []
+    //     currentid["choice"].push(data.choice)
+    //   }
+    //   // ["choice"] = data.choice;
+    //   console.log(
+    //     state.sectionList[data.sectionName].states[data.stateGroupName],
+    //     "state.sectionList[data.sectionName].states[data.stateGroupName]"
+    //   );
+    // }
+    // if (data.type == "add_next") {
+    //   state.sectionList[data.sectionName].states[data.stateGroupName][
+    //     data.index
+    //   ]["next"] = data.next;
+    // }
+    // if (data.type == "delete_next") {
+    //   delete state.sectionList[data.sectionName].states[data.stateGroupName][
+    //     data.index
+    //   ]["next"];
+    // }
+    // console.log(data, "执行了==>UPDATA_SECTION_LIST");
+    // event.$emit("sectionChange", state.sectionList);
     // state.dialogList = data;
   },
   [UPDATA_DIALOG_LIST](state, data) {
@@ -117,66 +129,136 @@ const mutations = {
     // state.dialogList = data;
   },
   [UPDATA_SECTION](state, data) {
-    console.log(data, "执行了==>updata_SECTION");
-    if (data.type == "add_section") {
-      let describe = data.describe;
-      if (!state.sectionList[describe]) {
-        let section = {
-          states: {
-            "1": [
-              {
-                messageId: "init",
-              },
-            ],
-          },
-        };
-
-        state.sectionList[describe] = section;
-      }
-    }
-    if (data.type == "add_state") {
-      let sectionName = data.sectionName;
-      let stateName = data.stateName;
-      if (state.sectionList[sectionName]) {
-        if (!state.sectionList[sectionName].states[stateName]) {
-          state.sectionList[sectionName].states[stateName] = [
-            {
-              messageId: "init",
-            },
-          ];
-          console.log(state.sectionList, "state.sectionList");
-        }
-      }
-    }
-    if (data.type == "delete_state") {
-      let sectionName = data.sectionName;
-      let stateName = data.selectStateName;
-      if (state.sectionList[sectionName]) {
-        if (state.sectionList[sectionName].states[stateName]) {
-          delete state.sectionList[sectionName].states[stateName];
-          console.log(state.sectionList, "删除-state-state.sectionList");
-        }
-      }
-    }
-    if (data.type == "init_dialog") {
-      let sectionName = data.sectionName;
-      let selectStateName = data.selectStateName;
-
-      if (state.sectionList[sectionName].states[selectStateName]) {
-        state.sectionList[sectionName].states[selectStateName] = [
-          {
-            messageId: "init",
-          },
-        ];
-        console.log(state.sectionList, "state.sectionList");
-      }
-    }
+    console.log("更新section data =====>>", data)
+    console.log("store-测试", state.sectionList)
     if (data.type == "delete_section") {
       if (state.sectionList[data.sectionName]) {
         delete state.sectionList[data.sectionName];
         console.warn("删除了", data.sectionName);
       }
+      return
     }
+    let sectionName = data.sectionName
+
+    let groupName = data.groupName
+    let index //查找原位置
+    let statelist
+    if (groupName) {
+
+      statelist = state.sectionList[sectionName].states[groupName]
+      statelist.map((item, i) => {
+        if (item.messageId == data.messageId) {
+          index = i
+        }
+      })
+      console.log(index, "index")
+    }
+
+
+    if (data.type == "add_normal") {
+      index = index + 1
+      data.helper.map((item, i) => {
+        let addmessageId = { messageId: item }
+        statelist.splice(index + i, 0, addmessageId)
+      })
+    }
+    if (data.type == "delete_normal") {
+      statelist.splice(index, 1)
+    }
+    if (data.type == "replace_normal") {
+      let replacemessageId = { messageId: data.helper[0] }
+      statelist.splice(index, 1, replacemessageId)
+    }
+    if (data.type == "add_choice") {
+      let add_choice_messageId = { messageId: data.helper[0], nextState: data.nextState }
+      if (statelist[index].choice) {
+        statelist[index].choice.push(add_choice_messageId)
+      } else {
+        statelist[index].choice = []
+        statelist[index].choice.push(add_choice_messageId)
+      }
+    }
+    if (data.type == "add_next") {
+      statelist[index].next = data.nextState
+    }
+    if (data.type == "add_group") {
+      if (!state.sectionList[sectionName].states[data.addGroupNum]) {
+        state.sectionList[sectionName].states[data.addGroupNum] = [{ messageId: "init" }]
+      }
+    }
+    if (data.type == "delete_choice") {
+      if (statelist[index].choice) {
+        delete statelist[index].choice
+      }
+    }
+    if (data.type == "delete_next") {
+      if (statelist[index].next) {
+        delete statelist[index].next
+      }
+    }
+    if (data.type == "delete_group") {
+      if (statelist) {
+        delete state.sectionList[sectionName].states[groupName]
+      }
+    }
+    event.$message.error("111");
+    console.log(statelist, "statelist")
+
+
+    // if (data.type == "add_section") {
+    //   let describe = data.describe;
+    //   if (!state.sectionList[describe]) {
+    //     let section = {
+    //       states: {
+    //         "1": [
+    //           {
+    //             messageId: "init",
+    //           },
+    //         ],
+    //       },
+    //     };
+
+    //     state.sectionList[describe] = section;
+    //   }
+    // }
+    // if (data.type == "add_state") {
+    //   let sectionName = data.sectionName;
+    //   let stateName = data.stateName;
+    //   if (state.sectionList[sectionName]) {
+    //     if (!state.sectionList[sectionName].states[stateName]) {
+    //       state.sectionList[sectionName].states[stateName] = [
+    //         {
+    //           messageId: "init",
+    //         },
+    //       ];
+    //       console.log(state.sectionList, "state.sectionList");
+    //     }
+    //   }
+    // }
+    // if (data.type == "delete_state") {
+    //   let sectionName = data.sectionName;
+    //   let stateName = data.selectStateName;
+    //   if (state.sectionList[sectionName]) {
+    //     if (state.sectionList[sectionName].states[stateName]) {
+    //       delete state.sectionList[sectionName].states[stateName];
+    //       console.log(state.sectionList, "删除-state-state.sectionList");
+    //     }
+    //   }
+    // }
+    // if (data.type == "init_dialog") {
+    //   let sectionName = data.sectionName;
+    //   let selectStateName = data.selectStateName;
+
+    //   if (state.sectionList[sectionName].states[selectStateName]) {
+    //     state.sectionList[sectionName].states[selectStateName] = [
+    //       {
+    //         messageId: "init",
+    //       },
+    //     ];
+    //     console.log(state.sectionList, "state.sectionList");
+    //   }
+    // }
+
     // if(!state.sectionList[describe]){
     //   state.sectionList[describe] = section
     // }

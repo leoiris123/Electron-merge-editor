@@ -3,23 +3,25 @@
     <div ref="box" class="box"></div>
     <!-- <button @click="test">test</button> -->
     <div style="position: relative">
-      <el-button type="info" style="left: 0; position: absolute"
+      <!--  -->
+      <div style="right: 20%; position: absolute">
+        <el-button
+          type="primary"
+          @click="dialogHandle(1)"
+          icon="el-icon-caret-bottom"
+        ></el-button>
+        <el-button
+          type="danger"
+          @click="dialogHandle(0)"
+          icon="el-icon-caret-top"
+        ></el-button>
+      </div>
+    </div>
+    <div>
+      <el-button type="info" style="font-size: 16px"
         >{{ selectDialogGroupName }} :</el-button
       >
     </div>
-
-    <el-button
-      type="warning"
-      @click="dialogHandle(1)"
-      icon="el-icon-caret-bottom"
-      circle
-    ></el-button>
-    <el-button
-      type="danger"
-      @click="dialogHandle(0)"
-      icon="el-icon-caret-top"
-      circle
-    ></el-button>
 
     <div class="dialog_body">
       <div class="dialog_edit">
@@ -30,8 +32,8 @@
             :name="item.id"
           >
             <template slot="title">
-              {{ item.txt
-              }}<i
+              <div>{{ item.txt }}</div>
+              <i
                 class="header-icon el-icon-info"
                 v-show="!checkdialogEditList[item.id]"
                 style="color: red"
@@ -147,7 +149,14 @@
                     </el-row>
                   </el-row>
                   <!--  轴坐标 -->
-                  <el-row type="flex">
+                  <el-row
+                    v-if="
+                      dialogEditList[item.id][character].char == ''
+                        ? false
+                        : true
+                    "
+                    type="flex"
+                  >
                     <el-input
                       type="number"
                       size="mini"
@@ -455,6 +464,7 @@ export default {
   // height: 100%;
   // border: 1px rgb(34, 38, 78) solid;
   overflow: scroll;
+  padding-left: 15px;
 }
 .row_txt {
   text-align: left;
@@ -478,5 +488,8 @@ export default {
   right: 6px;
   color: red;
   bottom: 4px;
+}
+.el-select {
+  width: 100%;
 }
 </style>

@@ -12,6 +12,9 @@ function throttle(func, wait) {
 
     }
 }
+
+
+
 /**
  * 常量
  * @type {string}

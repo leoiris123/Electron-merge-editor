@@ -7,7 +7,7 @@
         >
       </el-header>
       <el-container>
-        <el-aside width="20%">
+        <el-aside style="width: auto" max-width="20%">
           <asidedialog-list></asidedialog-list>
         </el-aside>
         <el-main>

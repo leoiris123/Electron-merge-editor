@@ -1,33 +1,45 @@
 <template>
-  <div id="aside">
-    <el-input
-      placeholder="输入关键字进行过滤"
-      v-model="filterText"
-      size="large"
-      clearable
-      @input="filterTextChange"
-    ></el-input>
-    <el-tree
-      :data="sectionList"
-      :props="defaultProps"
-      @node-click="handleNodeClick"
-      :highlight-current="true"
-      node-key="id"
-      ref="aside"
-      class="aside_main"
-      :filter-node-method="filterNode"
-    ></el-tree>
-    <el-row type="flex" style="margin-top: 10px">
-      <el-button @click="addSection" plain icon="el-icon-plus"
-        >新增场景</el-button
-      >
-      <el-input v-model="inputaddSection" placeholder="请输入内容"></el-input>
-    </el-row>
-    <el-row type="flex" style="margin-top: 10px">
-      <el-button @click="deleteSection" plain icon="el-icon-delete-solid"
-        >删除场景</el-button
-      >
-    </el-row>
+  <div>
+    <div v-if="!fold" id="aside">
+      <el-row type="flex"
+        ><el-input
+          placeholder="输入关键字进行过滤"
+          v-model="filterText"
+          size="large"
+          clearable
+          @input="filterTextChange"
+        ></el-input>
+        <el-button
+          @click="handleFold"
+          size="mini"
+          class="el-icon-d-arrow-left"
+        ></el-button
+      ></el-row>
+
+      <el-tree
+        :data="sectionList"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+        :highlight-current="true"
+        node-key="id"
+        ref="aside"
+        class="aside_main"
+        :filter-node-method="filterNode"
+      ></el-tree>
+
+      <el-row type="flex" style="margin-top: 5px">
+        <el-button @click="deleteSection" plain icon="el-icon-delete-solid"
+          >删除场景</el-button
+        >
+      </el-row>
+    </div>
+    <div v-else>
+      <el-button
+        @click="handleFold"
+        style="position: absolute"
+        class="el-icon-d-arrow-right"
+      ></el-button>
+    </div>
   </div>
 </template>
 
@@ -43,6 +55,7 @@ export default {
 
   data() {
     return {
+      fold: false,
       defaultProps: {
         children: "children",
         label: "label",
@@ -97,8 +110,8 @@ export default {
           };
           sectionList.push(temp);
         });
-        console.log(sectionListAll, "sectionListAll");
-        console.log(sectionList, "sectionList");
+        // console.log(sectionListAll, "sectionListAll");
+        // console.log(sectionList, "sectionList");
         // this.sectionList = sectionList
         // if(this.sectionListTemp == sectionList  ){
         //   return this.sectionListTemp
@@ -134,6 +147,10 @@ export default {
     },
   },
   methods: {
+    handleFold() {
+      this.fold = !this.fold;
+      console.log("this.fold", this.fold);
+    },
     filterTextChange(val) {
       this.$refs.aside.filter(val);
       // throttle(this.$refs.aside.filter(val), 10000);
@@ -171,19 +188,7 @@ export default {
       };
       this.$store.dispatch("section/UPDATA_SECTION", msg);
     },
-    addSection() {
-      if (this.inputaddSection == false) {
-        return;
-      }
 
-      let addsectionName = this.inputaddSection;
-
-      let msg = {
-        type: "add_section",
-        describe: addsectionName,
-      };
-      this.$store.dispatch("section/UPDATA_SECTION", msg);
-    },
     handleNodeClick(data) {
       let sectionListAll = this.$store.getters["section/sectionListGet"];
       // console.log(this.textConfig, "-textConfig");
@@ -217,7 +222,7 @@ export default {
   // overflow: scroll;
 }
 .aside_main {
-  height: 78vh;
+  height: 85vh;
   overflow: scroll;
 }
 .el-tree-node.is-current.is-focusable {

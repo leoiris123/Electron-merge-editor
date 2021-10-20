@@ -1,25 +1,42 @@
 <template>
-  <div id="dialog_aside">
-    <el-input
-      class="fixed"
-      placeholder="输入关键字进行过滤"
-      v-model="filterText"
-      size="large"
-      clearable
-      @input="filterTextChange"
-    ></el-input>
-    <el-tree
-      :data="dialogList"
-      :props="defaultProps"
-      @node-click="handleNodeClick"
-      :highlight-current="true"
-      :render-content="renderContent"
-      :current-node-key="selectName"
-      node-key="id"
-      ref="aside_dialog"
-      class="dialog_aside_main"
-      :filter-node-method="filterNode"
-    ></el-tree>
+  <div>
+    <div id="dialog_aside" v-if="!fold">
+      <el-row type="flex">
+        <el-input
+          class="fixed"
+          placeholder="输入关键字进行过滤"
+          v-model="filterText"
+          size="large"
+          clearable
+          @input="filterTextChange"
+        ></el-input>
+        <el-button
+          @click="handleFold"
+          size="mini"
+          class="el-icon-d-arrow-left"
+        ></el-button
+      ></el-row>
+
+      <el-tree
+        :data="dialogList"
+        :props="defaultProps"
+        @node-click="handleNodeClick"
+        :highlight-current="true"
+        :render-content="renderContent"
+        :current-node-key="selectName"
+        node-key="id"
+        ref="aside_dialog"
+        class="dialog_aside_main"
+        :filter-node-method="filterNode"
+      ></el-tree>
+    </div>
+    <div v-else>
+      <el-button
+        @click="handleFold"
+        style="position: absolute"
+        class="el-icon-d-arrow-right"
+      ></el-button>
+    </div>
     <!-- <button @click="test">test</button> -->
   </div>
 </template>
@@ -35,6 +52,7 @@ export default {
 
   data() {
     return {
+      fold: false,
       defaultProps: {
         children: "children",
         label: "label",
@@ -95,6 +113,10 @@ export default {
   },
 
   methods: {
+    handleFold() {
+      this.fold = !this.fold;
+      console.log("this.fold", this.fold);
+    },
     renderContent(h, { node, data, store }) {
       return (
         <span class="quest-item">
