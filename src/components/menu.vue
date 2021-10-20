@@ -72,14 +72,20 @@ ul {
   padding: 3px;
   margin: 0;
   border-radius: 7px;
-  background-color: teal;
+  background-color: rgb(255, 255, 255);
 }
 .li_item {
   padding: 1px 1px;
+
   /* border-bottom: red 1px solid; */
 }
+.li_item:hover {
+  background-color: rgb(138, 202, 228) !important;
+  /* border-bottom: red 1px solid; */
+}
+
 .li_item:not(:last-child) {
-  border-bottom: red 1px solid;
+  /* border-bottom: red 1px solid; */
 }
 .tip_ul {
   position: absolute;

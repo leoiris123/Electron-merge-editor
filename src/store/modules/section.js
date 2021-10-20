@@ -163,13 +163,16 @@ const mutations = {
         let addmessageId = { messageId: item }
         statelist.splice(index + i, 0, addmessageId)
       })
+      event.$message.success("Done");
     }
     if (data.type == "delete_normal") {
       statelist.splice(index, 1)
+      event.$message.success("Done");
     }
     if (data.type == "replace_normal") {
       let replacemessageId = { messageId: data.helper[0] }
       statelist.splice(index, 1, replacemessageId)
+      event.$message.success("Done");
     }
     if (data.type == "add_choice") {
       let add_choice_messageId = { messageId: data.helper[0], nextState: data.nextState }
@@ -179,31 +182,37 @@ const mutations = {
         statelist[index].choice = []
         statelist[index].choice.push(add_choice_messageId)
       }
+      event.$message.success("Done");
     }
     if (data.type == "add_next") {
       statelist[index].next = data.nextState
+      event.$message.success("Done");
     }
     if (data.type == "add_group") {
       if (!state.sectionList[sectionName].states[data.addGroupNum]) {
         state.sectionList[sectionName].states[data.addGroupNum] = [{ messageId: "init" }]
       }
+      event.$message.success("Done");
     }
     if (data.type == "delete_choice") {
       if (statelist[index].choice) {
         delete statelist[index].choice
       }
+      event.$message.success("Done");
     }
     if (data.type == "delete_next") {
       if (statelist[index].next) {
         delete statelist[index].next
       }
+      event.$message.success("Done");
     }
     if (data.type == "delete_group") {
       if (statelist) {
         delete state.sectionList[sectionName].states[groupName]
       }
+      event.$message.success("Done");
     }
-    event.$message.error("Done");
+
     console.log(statelist, "statelist")
 
     event.$emit("sectionChange2", state.sectionList);

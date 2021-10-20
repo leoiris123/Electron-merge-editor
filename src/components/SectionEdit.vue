@@ -154,11 +154,7 @@ export default {
   beforeDestroy() {},
   mounted() {
     event.$on("selectNameChange", this.selectNameChange);
-    event.$on("sectionChange2", (val) => {
-      // this.sectionListAll = val;
-      // console.log("aa", this.sectionListAll, this.sectionName, val);
-      // this.$set(this.sectionListAll, this.sectionName, val);
-    });
+    event.$on("sectionChange2", (val) => {});
     document.querySelector(".sectionEdit").onmouseup = (e) => {
       // console.log("E", e);
       if (e.button == 2) {
@@ -188,22 +184,14 @@ export default {
       get() {
         return this.$store.getters["section/sectionListGet"];
       },
-      set(val) {
-        // console.log("==>>section页面数据更新");
-        // this.$forceUpdate();
-      },
     },
     statesData: {
       get() {
-        // event.$on("sectionChange2", (val) => {
-        //   this.$forceUpdate();
-        // });
         let statesData = this.sectionListAll;
         if (!this.sectionName) {
           return {};
         }
         if (statesData[this.sectionName]) {
-          //   console.log(statesData[this.sectionName].states,"statesData[this.sectionName].states")
           return statesData[this.sectionName].states;
         } else {
           return {};
@@ -220,7 +208,6 @@ export default {
           });
           statesDataArrange = statesDataArrange.concat(statesData[key]);
         }
-
         return statesDataArrange;
       },
     },
@@ -298,12 +285,10 @@ export default {
             console.warn("default:未知命令");
             break;
         }
-        // this.$store.dispatch("section/UPDATA_SECTION", msg);
         this.msg = null; //清空数据
       };
     },
     menuShow(row, column, e) {
-      // console.log("row, column, event", row, column, e);
       //创建tip需要的信息
       let msg = {
         sectionName: this.sectionName,
@@ -375,17 +360,16 @@ export default {
     },
 
     handleDoubleClick(row, rowevent, column) {
-      // let msg = {
-      //   sectionName: this.sectionName,
-      //   stateGroupName: row.groupName,
-      //   index: row.row_index,
-      //   // messageId:row.messageId
-      // };
-      // event.$emit("OpenOrderList", msg);
-
-      console.log("sectionListAll:", this.sectionListAll);
-      console.log("statesData:", this.statesData);
+      let msg = {
+        sectionName: this.sectionName,
+        groupName: row.groupName,
+        messageId: row.messageId,
+        type: "add_normal",
+      };
+      this.msg = msg;
       throttle(event.$emit("innerchooseDialog", this.msg), 1000);
+      console.log("row, rowevent, column:", row, rowevent, column);
+      console.log("statesData:", this.statesData);
 
       //   console.log(row, event, column, "DoubleClick==>row, event, column");
     },

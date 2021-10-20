@@ -17,11 +17,10 @@
         ></el-button>
       </div>
     </div>
-    <div>
-      <el-button type="info" style="font-size: 16px"
-        >{{ selectDialogGroupName }} :</el-button
-      >
-    </div>
+
+    <el-button style="font-size: 16px; z-index: 10"
+      >{{ selectDialogGroupName }} :</el-button
+    >
 
     <div class="dialog_body">
       <div class="dialog_edit">

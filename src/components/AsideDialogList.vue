@@ -3,17 +3,18 @@
     <div id="dialog_aside" v-if="!fold">
       <el-row type="flex">
         <el-input
-          class="fixed"
           placeholder="输入关键字进行过滤"
           v-model="filterText"
           size="large"
           clearable
+          style="200px"
           @input="filterTextChange"
         ></el-input>
         <el-button
           @click="handleFold"
           size="mini"
           class="el-icon-d-arrow-left"
+          style="z-index: 10"
         ></el-button
       ></el-row>
 
@@ -178,9 +179,5 @@ export default {
 .dialog_aside_main {
   height: 89vh;
   overflow: scroll;
-}
-.fixed {
-  position: fixed;
-  // top: ;
 }
 </style>
