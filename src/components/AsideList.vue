@@ -71,6 +71,7 @@ export default {
   mounted() {
     event.$on("sectionChange", (val) => {
       this.sectionListAll = val;
+      this.$forceUpdate();
     });
   },
   computed: {

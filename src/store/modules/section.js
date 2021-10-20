@@ -136,6 +136,8 @@ const mutations = {
         delete state.sectionList[data.sectionName];
         console.warn("删除了", data.sectionName);
       }
+      event.$message.error("Done");
+      event.$emit("sectionChange", state.sectionList);
       return
     }
     let sectionName = data.sectionName
@@ -201,70 +203,13 @@ const mutations = {
         delete state.sectionList[sectionName].states[groupName]
       }
     }
-    event.$message.error("111");
+    event.$message.error("Done");
     console.log(statelist, "statelist")
 
+    event.$emit("sectionChange2", state.sectionList);
 
-    // if (data.type == "add_section") {
-    //   let describe = data.describe;
-    //   if (!state.sectionList[describe]) {
-    //     let section = {
-    //       states: {
-    //         "1": [
-    //           {
-    //             messageId: "init",
-    //           },
-    //         ],
-    //       },
-    //     };
 
-    //     state.sectionList[describe] = section;
-    //   }
-    // }
-    // if (data.type == "add_state") {
-    //   let sectionName = data.sectionName;
-    //   let stateName = data.stateName;
-    //   if (state.sectionList[sectionName]) {
-    //     if (!state.sectionList[sectionName].states[stateName]) {
-    //       state.sectionList[sectionName].states[stateName] = [
-    //         {
-    //           messageId: "init",
-    //         },
-    //       ];
-    //       console.log(state.sectionList, "state.sectionList");
-    //     }
-    //   }
-    // }
-    // if (data.type == "delete_state") {
-    //   let sectionName = data.sectionName;
-    //   let stateName = data.selectStateName;
-    //   if (state.sectionList[sectionName]) {
-    //     if (state.sectionList[sectionName].states[stateName]) {
-    //       delete state.sectionList[sectionName].states[stateName];
-    //       console.log(state.sectionList, "删除-state-state.sectionList");
-    //     }
-    //   }
-    // }
-    // if (data.type == "init_dialog") {
-    //   let sectionName = data.sectionName;
-    //   let selectStateName = data.selectStateName;
 
-    //   if (state.sectionList[sectionName].states[selectStateName]) {
-    //     state.sectionList[sectionName].states[selectStateName] = [
-    //       {
-    //         messageId: "init",
-    //       },
-    //     ];
-    //     console.log(state.sectionList, "state.sectionList");
-    //   }
-    // }
-
-    // if(!state.sectionList[describe]){
-    //   state.sectionList[describe] = section
-    // }
-
-    event.$emit("sectionChange", state.sectionList);
-    // state.dialogList = data;
   },
 };
 

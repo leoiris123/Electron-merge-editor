@@ -154,8 +154,10 @@ export default {
   beforeDestroy() {},
   mounted() {
     event.$on("selectNameChange", this.selectNameChange);
-    event.$on("sectionChange", (val) => {
-      this.sectionListAll = val;
+    event.$on("sectionChange2", (val) => {
+      // this.sectionListAll = val;
+      // console.log("aa", this.sectionListAll, this.sectionName, val);
+      // this.$set(this.sectionListAll, this.sectionName, val);
     });
     document.querySelector(".sectionEdit").onmouseup = (e) => {
       // console.log("E", e);
@@ -188,11 +190,15 @@ export default {
       },
       set(val) {
         // console.log("==>>section页面数据更新");
+        // this.$forceUpdate();
       },
     },
     statesData: {
       get() {
-        let statesData = this.$store.getters["section/sectionListGet"];
+        // event.$on("sectionChange2", (val) => {
+        //   this.$forceUpdate();
+        // });
+        let statesData = this.sectionListAll;
         if (!this.sectionName) {
           return {};
         }
