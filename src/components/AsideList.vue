@@ -137,7 +137,7 @@ export default {
       lostsectionIDList.map((id) => {
         let msg = {
           type: "add_section",
-          describe: id,
+          sectionName: id,
         };
         this.$store.dispatch("section/UPDATA_SECTION", msg);
       });

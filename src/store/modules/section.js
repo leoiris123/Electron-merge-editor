@@ -136,7 +136,22 @@ const mutations = {
         delete state.sectionList[data.sectionName];
         console.warn("删除了", data.sectionName);
       }
-      event.$message.error("Done");
+      event.$message.success("Done");
+      event.$emit("sectionChange", state.sectionList);
+      return
+    }
+    if (data.type == "add_section") {
+      if (!state.sectionList[data.sectionName]) {
+        state.sectionList[data.sectionName] = {
+          states: {
+            "1": [{
+              "messageId": "init"
+            },]
+          }
+        };
+        console.warn("自动生成了", data.sectionName);
+      }
+      event.$message.success("Done");
       event.$emit("sectionChange", state.sectionList);
       return
     }
