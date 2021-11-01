@@ -179,7 +179,6 @@ export default {
       if (from.name == "MainView") {
         window.location.reload(); //章节切换清空store
       }
-      // 通过 `vm` 访问组件实例
     });
   },
 };

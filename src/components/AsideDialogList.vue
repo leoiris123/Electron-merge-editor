@@ -38,7 +38,6 @@
         class="el-icon-d-arrow-right"
       ></el-button>
     </div>
-    <!-- <button @click="test">test</button> -->
   </div>
 </template>
 
@@ -94,13 +93,9 @@ export default {
           };
           dialogList.push(temp);
         });
-        console.log("asd");
         return dialogList;
       },
     },
-    // top: {
-    //   get() {},
-    // },
   },
 
   mounted() {
@@ -108,8 +103,6 @@ export default {
     event.$on("checkdialogEditList", (checkdialogEditList) => {
       this.checkdialogEditList = checkdialogEditList;
       this.checkFlag = true;
-      // setCurrentKey
-      // console.log(this.selectName, "this.selectName");
     });
   },
 
@@ -132,7 +125,6 @@ export default {
     },
     filterTextChange(val) {
       this.$refs.aside_dialog.filter(val);
-      // throttle(this.$refs.aside.filter(val), 10000);
     },
     filterNode(value, data) {
       if (!value) return true;
@@ -145,30 +137,12 @@ export default {
       console.log(data.label, "当前选择的selectName");
       this.selectName = data.label;
       event.$emit("selectDialogNameChange", this.selectName);
-      // if (this.$refs.aside_dialog && this.$refs.aside_dialog.getCurrentKey()) {
-      //   this.$refs.aside_dialog.setCheckedKeys(
-      //     this.$refs.aside_dialog.getCurrentKey(),
-      //     true
-      //   );
-      // }
-      // console.log(this.$refs.aside_dialog.setCheckedNodes, "setCheckedNodes");
-      // let top = document.querySelector(".fixed");
-
-      // console.log(top, top.getBoundingClientRect().top, "top.scrollTop");
-      //   event.$on("countListObjChange", this.countListObjChange);
-      //   let sectionListAll = this.$store.getters["section/sectionListGet"];
-      //   let sectionName = Object.keys(sectionListAll);
-      //   console.log(sectionListAll, "sectionListAll");
-      //   console.log(this.sectionList, "sectionList");
     },
   },
 };
 </script>
 
 <style lang="scss" >
-// .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-//   background-color: #f06060 !important;
-// }
 .el-tree-node__label {
   font-size: 14px;
   line-height: 14px;

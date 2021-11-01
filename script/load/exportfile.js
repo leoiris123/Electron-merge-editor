@@ -38,19 +38,6 @@ function getchapterNum() {
 }
 export const exportutil = {
 
-  //   exportBuilding(exportPath,str){
-  //     const buildingListPath = path.join(
-  //         exportPath,
-  //         "buildingList.json"
-  //     )
-
-  //     if(!fs.existsSync(exportPath)) {
-  //         fs.mkdirSync(exportPath)
-  //     }
-  //     fs.writeFileSync(buildingListPath, str)
-  // },
-
-
   exportJSON(rootpath, fileName, str) {
     let chapter = this.getChapter()
     getexportPath(fileName)

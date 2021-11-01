@@ -9,7 +9,6 @@ function throttle(func, wait) {
                 func.apply(context, args)
             }, wait)
         }
-
     }
 }
 

@@ -4,23 +4,16 @@
     <!-- <button @click="test">test</button> -->
     <div style="position: relative">
       <!--  -->
-      <div style="right: 20%; position: absolute">
-        <el-button
-          type="primary"
-          @click="dialogHandle(1)"
-          icon="el-icon-caret-bottom"
-        ></el-button>
-        <el-button
-          type="danger"
-          @click="dialogHandle(0)"
-          icon="el-icon-caret-top"
-        ></el-button>
-      </div>
     </div>
-
-    <el-button style="font-size: 16px; z-index: 10"
-      >{{ selectDialogGroupName }} :</el-button
-    >
+    <el-tooltip class="item" effect="light" placement="right">
+      <div slot="content">点击展开<br />双击收起</div>
+      <el-button
+        @click="dialogHandle(1)"
+        @dblclick.native="dialogHandle(0)"
+        style="font-size: 16px; z-index: 10"
+        >{{ selectDialogGroupName }} :</el-button
+      >
+    </el-tooltip>
 
     <div class="dialog_body">
       <div class="dialog_edit">
@@ -272,6 +265,7 @@ export default {
         currentId: "",
         char: "",
         emotion: "",
+        timer: null,
       },
       currentName: ["1"],
       selectDialogGroupName: "",
@@ -424,8 +418,13 @@ export default {
       this.$forceUpdate();
     },
     dialogHandle(val) {
+      console.log(val, "val");
+
+      clearTimeout(this.timer);
       if (val) {
-        this.currentName = Object.keys(this.selectGroupData);
+        this.timer = setTimeout(() => {
+          this.currentName = Object.keys(this.selectGroupData);
+        }, 300);
       } else {
         this.currentName = [];
       }

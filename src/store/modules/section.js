@@ -65,64 +65,6 @@ const mutations = {
   },
   [UPDATA_SECTION_LIST](state, data) {
 
-
-
-
-
-
-
-
-
-
-
-
-    // if (data.type == "modify_normal") {
-    //   state.sectionList[data.sectionName].states[data.stateGroupName][
-    //     data.index
-    //   ].messageId = data.messageId;
-    // }
-    // if (data.type == "add_normal") {
-    //   state.sectionList[data.sectionName].states[data.stateGroupName].splice(
-    //     data.index + 1,
-    //     0,
-    //     {
-    //       messageId: data.messageId,
-    //     }
-    //   );
-    // }
-    // if (data.type == "delete_normal") {
-    //   state.sectionList[data.sectionName].states[data.stateGroupName].splice(
-    //     data.index,
-    //     1
-    //   );
-    // }
-    // if (data.type == "add_branch") {
-    //   let currentid = state.sectionList[data.sectionName].states[data.stateGroupName][data.index]
-    //   if (currentid["choice"]) {
-    //     currentid["choice"].push(data.choice)
-    //   } else {
-    //     currentid["choice"] = []
-    //     currentid["choice"].push(data.choice)
-    //   }
-    //   // ["choice"] = data.choice;
-    //   console.log(
-    //     state.sectionList[data.sectionName].states[data.stateGroupName],
-    //     "state.sectionList[data.sectionName].states[data.stateGroupName]"
-    //   );
-    // }
-    // if (data.type == "add_next") {
-    //   state.sectionList[data.sectionName].states[data.stateGroupName][
-    //     data.index
-    //   ]["next"] = data.next;
-    // }
-    // if (data.type == "delete_next") {
-    //   delete state.sectionList[data.sectionName].states[data.stateGroupName][
-    //     data.index
-    //   ]["next"];
-    // }
-    // console.log(data, "执行了==>UPDATA_SECTION_LIST");
-    // event.$emit("sectionChange", state.sectionList);
-    // state.dialogList = data;
   },
   [UPDATA_DIALOG_LIST](state, data) {
     console.log(data, "执行了==>UPDATA_DIALOG_LIST");

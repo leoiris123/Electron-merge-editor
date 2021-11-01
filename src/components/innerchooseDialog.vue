@@ -32,8 +32,6 @@
       </el-col>
     </el-row>
     <span slot="footer" class="dialog-footer">
-      <!-- <button @click="handleClick">handleClick</button> -->
-
       <el-row type="flex-end" style="margin-bottom: 10px">
         <el-button @click="innerchooseDialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="handleConfirm(received)"
@@ -76,28 +74,6 @@
           >
           </el-option>
         </el-select>
-        <!-- <el-button @click="innerchooseDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="handleConfirm('modify_normal')"
-          >修改</el-button
-        >
-        <el-button type="primary" @click="handleConfirm('add_normal')"
-          >新增</el-button
-        >
-        <el-button type="primary" @click="handleConfirm('delete_normal')"
-          >删除</el-button
-        >
-      </el-row>
-
-      <el-row type="flex-end">
-        <el-button type="danger" @click="handleConfirm('add_branch')"
-          >新增分支</el-button
-        >
-        <el-button type="danger" @click="handleConfirm('add_next')"
-          >新增next</el-button
-        >
-        <el-button type="danger" @click="handleConfirm('delete_next')"
-          >删除next</el-button
-        > -->
       </el-row>
     </span>
   </el-dialog>
@@ -135,11 +111,6 @@ export default {
 
       this.innerchooseDialogVisible = true;
       this.received = received;
-
-      // this.addBranch = false;
-      // this.nextState = null;
-      // this.addNormalHelper = 0;
-      // console.log(received, "received--");
     });
   },
   computed: {
@@ -155,7 +126,6 @@ export default {
       Object.keys(dialogListGet).map((item) => {
         dialogNameList.push({
           property: item,
-          //  txt:dialogListGet[item].txt
         });
       });
       return dialogNameList;
@@ -171,120 +141,6 @@ export default {
     changeType(str) {
       return parseInt(str);
     },
-    // handleConfirm(type) {
-    //   let checkList = this.checkList;
-    //   if (
-    //     this.checkList.length < 1 &&
-    //     (type == "add_normal" || type == "modify_normal")
-    //   ) {
-    //     // this.innerchooseDialogVisible = false;
-    //     console.warn("选择失败");
-    //     return;
-    //   }
-
-    //   if (type == "add_branch") {
-    //     if (!this.addBranch) {
-    //       this.addBranch = true;
-    //       return;
-    //     }
-    //     if (this.nextState == "" || checkList.length < 1) {
-    //       return;
-    //     }
-    //     let msgbranch = {};
-    //     Object.assign(
-    //       msgbranch,
-    //       {
-    //         type: type,
-    //         messageId: checkList[0], //后续增加多选功能
-    //         choice: {
-    //           messageId: checkList[0],
-    //           nextState: this.nextState,
-    //         },
-
-    //         // choice: [
-    //         //   {
-    //         //     messageId: checkList[0],
-    //         //     nextState: this.nextState,
-    //         //   },
-    //         //   {
-    //         //     messageId: checkList[1],
-    //         //     nextState: this.nextState[1],
-    //         //   },
-    //         // ],
-    //       },
-    //       this.received
-    //     );
-    //     console.log(msgbranch, "msgbranch");
-    //     this.$store.dispatch("section/UPDATA_SECTION_LIST", msgbranch);
-    //     this.$notify({
-    //       title: "分支设置成功",
-    //       message: "成功",
-    //       type: "success",
-    //       duration: 1100,
-    //     });
-    //     return;
-    //   }
-    //   if (type == "add_next") {
-    //     if (!this.addBranch) {
-    //       this.addBranch = true;
-    //       return;
-    //     }
-    //     if (this.nextState == "") {
-    //       return;
-    //     }
-    //     let msg = {};
-    //     Object.assign(
-    //       msg,
-    //       {
-    //         type: type,
-    //         next: this.nextState,
-    //         messageId: checkList[0], //后续增加多选功能
-    //       },
-    //       this.received
-    //     );
-    //     this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
-    //     this.$notify({
-    //       title: "next设置成功",
-    //       message: "成功",
-    //       type: "success",
-    //       duration: 1100,
-    //     });
-    //     return;
-    //   }
-    //   if (type == "add_normal") {
-    //     checkList.map((item, index) => {
-    //       this.addNormalHelper++;
-    //       let msg = {};
-    //       Object.assign(
-    //         msg,
-    //         {
-    //           type: type,
-    //           messageId: item, //后续增加多选功能
-    //         },
-    //         this.received
-    //       );
-    //       msg.index = msg.index + index + this.addNormalHelper;
-    //       this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
-    //     });
-    //     return;
-    //   }
-    //   let msg = {};
-    //   Object.assign(
-    //     msg,
-    //     {
-    //       type: type,
-    //       messageId: checkList[0], //后续增加多选功能
-    //     },
-    //     this.received
-    //   );
-    //   this.$store.dispatch("section/UPDATA_SECTION_LIST", msg);
-    //   this.$notify({
-    //     title: "成功",
-    //     message: "成功",
-    //     type: "success",
-    //     duration: 1100,
-    //   });
-    // },
 
     handleConfirm(received) {
       let checkList = this.checkList;
@@ -294,19 +150,19 @@ export default {
         received.type !== "add_next" &&
         received.type !== "add_group"
       ) {
-        this.$message.error("请选择11");
+        this.$message.error("请选择,err1");
         return;
       }
       if (received.type == "add_choice" || received.type == "add_next") {
         if (!this.nextState) {
-          this.$message.error("请选择1");
+          this.$message.error("请选择,err2");
           return;
         }
         received.nextState = this.nextState;
       }
       if (received.type == "add_group") {
         if (!this.addGroupNum) {
-          this.$message.error("请选择2");
+          this.$message.error("请选择,err3");
           return;
         }
         received.addGroupNum = this.addGroupNum;
