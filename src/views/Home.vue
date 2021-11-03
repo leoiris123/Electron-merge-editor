@@ -53,7 +53,7 @@ export default {
   computed: {},
   methods: {
     finddirList() {
-      console.log("测试-mac")
+      console.log("测试-mac-2")
       let dirList = [];
       if (this.rootPath !== "") {
         fs.readdir(this.rootPath + PATH_CONFIG.localDataPath, (err, files) => {
