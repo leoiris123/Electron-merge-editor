@@ -8,7 +8,10 @@
       >进入主界面</el-button
     > -->
 
-    <el-row type="flex" style="top: 5%; justify-content: center">
+    <el-row
+      type="flex"
+      style="top: 5%; justify-content: center; flex-wrap: wrap"
+    >
       <el-row v-for="(chapter, index) in dirList" :key="index" class="row">
         <el-button
           type="primary"
