@@ -11,9 +11,11 @@ export const filtertool = {
                 if (data[key][character] && (data[key][character] === {} || data[key][character].char == "")) {
                     delete data[key][character]
                 } else if (data[key][character] && (!data[key][character].skin || data[key][character].skin === "")) {
+                    if (configuration[data[key][character].char] == undefined) {
+                        console.warn(data[key][character].char, "错误角色-请更新角色配置表")
+                    }
                     data[key][character].skin = configuration[data[key][character].char].spine.skin[0]
                 }
-
             })
         }
     },
