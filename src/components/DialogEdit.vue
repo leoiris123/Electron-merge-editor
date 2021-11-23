@@ -59,7 +59,7 @@
                       </el-option>
                     </el-select>
                   </el-row>
-                  <!-- 选择动画： -->
+                  <!-- 选择表情： -->
                   <el-row
                     v-if="
                       dialogEditList[item.id][character].char == ''
@@ -81,14 +81,12 @@
                         clearable
                         placeholder="请选择"
                       >
-                        <!-- configuration[dialogEditList[item.id][character].char].skin.default -->
-                        <!-- :disabled="dialogEditList[item.id][character].char==''?true:false" -->
                         <div>
                           <el-option
                             v-for="item in dialogEditList[item.id]
                               ? configuration[
                                   dialogEditList[item.id][character].char
-                                ].skin.default
+                                ].spine.ani
                               : null"
                             :key="item"
                             :label="item"
@@ -99,7 +97,44 @@
                       </el-select>
                     </el-row>
                   </el-row>
-
+                  <!-- 皮肤 -->
+                  <el-row
+                    v-if="
+                      dialogEditList[item.id][character].char == ''
+                        ? false
+                        : true
+                    "
+                  >
+                    <el-row type="flex"
+                      ><div class="vertical">皮肤</div>
+                      <el-select
+                        v-if="
+                          dialogEditList[item.id][character].char == ''
+                            ? false
+                            : true
+                        "
+                        v-model="dialogEditList[item.id][character].skin"
+                        @change="handleSelectChange"
+                        filterable
+                        clearable
+                        placeholder="请选择"
+                      >
+                        <div>
+                          <el-option
+                            v-for="item in dialogEditList[item.id]
+                              ? configuration[
+                                  dialogEditList[item.id][character].char
+                                ].spine.skin
+                              : null"
+                            :key="item"
+                            :label="item"
+                            :value="item"
+                          >
+                          </el-option>
+                        </div>
+                      </el-select>
+                    </el-row>
+                  </el-row>
                   <!-- 选择音效 -->
                   <el-row
                     v-if="
