@@ -25,7 +25,7 @@ const getters = {
     return state.dialogList;
   },
   dialogListArrangeGet(state) {
-    console.log("执行了==>dialogListArrangeget");
+    console.log("执行了==>dialogListArrangeget", state.dialogListArrange);
     return state.dialogListArrange;
   },
   dialogEditListGet(state) {
