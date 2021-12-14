@@ -25,7 +25,7 @@
           <div>
             {{
               dialogListArrange[scope.row.messageId]
-                ? dialogListArrange[scope.row.messageId].txt
+                ? dialogListArrange[scope.row.messageId].zh
                 : scope.row.messageId
             }}
           </div>
@@ -47,7 +47,7 @@
                 text:
                 {{
                   item && dialogListArrange[item.messageId]
-                    ? dialogListArrange[item.messageId].txt
+                    ? dialogListArrange[item.messageId].zh
                     : "无"
                 }}
               </p>

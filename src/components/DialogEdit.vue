@@ -24,7 +24,7 @@
             :name="item.id"
           >
             <template slot="title">
-              <div>{{ item.txt }}</div>
+              <div>{{ item.zh }}</div>
               <i
                 class="header-icon el-icon-info"
                 v-show="!checkdialogEditList[item.id]"

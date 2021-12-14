@@ -26,7 +26,7 @@
       <el-col :span="19">
         <el-checkbox-group v-model="checkList">
           <el-row v-for="(message, index) in messageList" :key="index">
-            <el-checkbox :label="message.id">{{ message.txt }}</el-checkbox>
+            <el-checkbox :label="message.id">{{ message.zh }}</el-checkbox>
           </el-row>
         </el-checkbox-group>
       </el-col>
