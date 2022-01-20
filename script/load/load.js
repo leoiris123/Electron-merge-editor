@@ -26,7 +26,7 @@ const XMLList = {
   dialogConfig: {
     localPath: read("/dialogConfig.xlsx"),
     storeScript: "section/SET_DIALOG_LIST",
-    sortType: { header: ["property", "id", "en", "zh", "pt", "ko", "de", "kr", "fr", "it", "ja", "es", "ru", "zh_t"] },
+    sortType: { header: ["property", "id", "en", "zh", "pt", "ko", "de", "tr", "fr", "it", "ja", "es", "ru", "zh_t"] },
   },
   textConfig: {
     localPath: "/textConfig.xlsx",
