@@ -7,7 +7,12 @@
     <!-- <el-button plain icon="el-icon-chat-line-round" @click="goMainView"
       >进入主界面</el-button
     > -->
-
+    <el-button
+      type="primary"
+      icon="el-icon-chat-line-round"
+      @click="MergeChapterData"
+      >合并</el-button
+    >
     <el-row
       type="flex"
       style="top: 5%; justify-content: center; flex-wrap: wrap"
@@ -55,6 +60,94 @@ export default {
   },
   computed: {},
   methods: {
+    MergeChapterData() {
+      // 拿到所有的章节路径
+      let DialogDataListPath = [];
+      let SceneDataListPath = [];
+      let dialogConfigListPath = [];
+      this.dirList.forEach((item) => {
+        let suffix = item.split("_");
+        SceneDataListPath.push(
+          this.rootPath +
+            PATH_CONFIG.localDataPath +
+            "/" +
+            item +
+            "/" +
+            PATH_CONFIG.conversation_ +
+            suffix[1] +
+            ".json"
+        );
+        DialogDataListPath.push(
+          this.rootPath +
+            PATH_CONFIG.localDataPath +
+            "/" +
+            item +
+            "/" +
+            PATH_CONFIG.dialogEditData_ +
+            suffix[1] +
+            ".json"
+        );
+        dialogConfigListPath.push(
+          this.rootPath +
+            PATH_CONFIG.localDataPath +
+            "/" +
+            item +
+            "/" +
+            PATH_CONFIG.dialogConfigData_ +
+            suffix[1] +
+            ".json"
+        );
+      });
+      console.log("SceneDataListPath", SceneDataListPath);
+      console.log("dialogDataListPath", DialogDataListPath);
+      console.log("dialogConfigListPath", dialogConfigListPath);
+
+      Promise.all([
+        this.ReadMergeData(SceneDataListPath),
+        this.ReadMergeData(DialogDataListPath),
+        this.ReadMergeData(dialogConfigListPath),
+      ])
+        .then((data) => {
+          console.log(data, "总数据");
+          let outaimScenePath = this.rootPath + PATH_CONFIG.outaimScenePath;
+          let outaimDialogPath = this.rootPath + PATH_CONFIG.outaimDialogPath;
+          let outaimlanPath = this.rootPath + PATH_CONFIG.outaimlanPath;
+
+          fs.writeFileSync(outaimScenePath, JSON.stringify(data[0]));
+          fs.writeFileSync(outaimDialogPath, JSON.stringify(data[1]));
+          fs.writeFileSync(outaimlanPath, JSON.stringify(data[2]));
+        })
+        .catch((err) => {
+          console.log(err, "errrrrr");
+          this.$notify({
+            title: err,
+            message: "错误路径",
+            type: "warning",
+            duration: 900,
+          });
+        });
+    },
+    ReadMergeData(itemList) {
+      return new Promise((resolve, reject) => {
+        let PromiseList = itemList.map((item) => {
+          return loader.loadFileSingle(item);
+        });
+        console.log(PromiseList);
+        Promise.all(PromiseList)
+          .then((data) => {
+            console.log(data, "异步数据");
+            let allitemMerge = {};
+            data.forEach((item) => {
+              Object.assign(allitemMerge, item);
+            });
+            resolve(allitemMerge);
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      });
+    },
+    ReadDialog() {},
     finddirList() {
       console.log("测试-mac-2");
       let dirList = [];

@@ -148,4 +148,25 @@ export const loader = {
       resolve("json加载完成")
     })
   },
+
+
+  // 
+
+  loadFileSingle(itemPath) {
+    return new Promise((resolve, reject) => {
+      fs.readFile(
+        itemPath,
+        "utf-8",
+        (err, data) => {
+          if (err) {
+            reject(itemPath)
+            console.warn("err", err);
+          } else {
+            resolve(JSON.parse(data))
+          }
+        }
+      );
+
+    })
+  },
 };

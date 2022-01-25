@@ -10,7 +10,8 @@ let exportPath = {
 };
 let savePath = {
   sectionData: "/conversation.json",
-  dialogEditList: "/dialogEditData.json"
+  dialogEditList: "/dialogEditData.json",
+  dialogConfig: "/dialogConfig.json"
 };
 function getexportPath(filename) {
   //后续优化
@@ -29,6 +30,8 @@ function getsavePath(filename) {
     savePath[filename] = `/conversation${getchapterNum()}.json`
   } else if (filename === 'dialogEditList') {
     savePath[filename] = `/dialogEditData${getchapterNum()}.json`
+  } else if (filename === 'dialogConfig') {
+    savePath[filename] = `/dialogConfig${getchapterNum()}.json`
   }
 }
 function getchapterNum() {

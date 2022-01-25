@@ -2,11 +2,8 @@
   <div class="main">
     <el-container style="height:100%;weight100%">
       <el-header height="6%" class="top-list">
-        <el-button @click="dataCombine" type="primary" icon="el-icon-position"
+        <el-button @click="open" type="primary" icon="el-icon-position"
           >导出合并</el-button
-        >
-        <el-button @click="dataReplace" plain icon="el-icon-download"
-          >导入替换</el-button
         >
         <el-button @click="saveResource" plain icon="el-icon-folder-checked"
           >保存</el-button
@@ -37,6 +34,7 @@
 </template>
 
 <script>
+import { PATH_CONFIG } from "../../script/config/config.js";
 import BackBtn from "@/components/BackBtn.vue";
 import AsideList from "@/components/AsideList.vue";
 import SectionEdit from "@/components/SectionEdit";
@@ -76,9 +74,9 @@ export default {
       let dialogListArrange =
         this.$store.getters["section/dialogListArrangeGet"];
 
-      let outaimDialogPath = rootPath + "/exportData/" + "exportDialoglib.json";
-      let outaimScenePath = rootPath + "/exportData/" + "exportSection.json";
-      let outaimlanPath = rootPath + "/exportData/" + "exportDialogConfig.json";
+      let outaimDialogPath = rootPath + PATH_CONFIG.outaimDialogPath;
+      let outaimScenePath = rootPath + PATH_CONFIG.outaimScenePath;
+      let outaimlanPath = rootPath + PATH_CONFIG.outaimlanPath;
 
       // 获取外部数据;
       Promise.all([
@@ -109,12 +107,26 @@ export default {
         fs.writeFileSync(outaimlanPath, JSON.stringify(this.aimlan));
       });
     },
-    dataReplace() {
-      //此时其实没有对保存数据和导出数据作区分
-      //因此可以直接对比修改
-      //
-      this.handleReplaceDialog();
+    open() {
+      this.$confirm("此操作将重写导出总文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "正在重写总数据!",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消",
+          });
+        });
     },
+
     handleReplaceDialog() {
       let rootPath = localStorage.getItem("rootPath");
       //获取本地数据
@@ -200,6 +212,10 @@ export default {
       filtertool.filterempty(dialogEditListAll);
       let dialogEditListStr = JSON.stringify(dialogEditListAll);
       exportutil.saveJSON(rootPath, "dialogEditList", dialogEditListStr);
+
+      let dialogConfig = this.$store.getters["section/dialogListArrangeGet"];
+      let dialogConfigStr = JSON.stringify(dialogConfig);
+      exportutil.saveJSON(rootPath, "dialogConfig", dialogConfigStr);
     },
     goDialogView() {
       console.log("=>进入对白");
