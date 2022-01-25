@@ -3,16 +3,14 @@
     <el-row type="flex">
       <el-button @click="importResource">导入路径</el-button>
       <el-input :value="rootPath" placeholder="请选择"></el-input>
+      <el-button type="success" icon="el-icon-chat-line-round" @click="open"
+        >合并操作</el-button
+      >
     </el-row>
     <!-- <el-button plain icon="el-icon-chat-line-round" @click="goMainView"
       >进入主界面</el-button
     > -->
-    <el-button
-      type="primary"
-      icon="el-icon-chat-line-round"
-      @click="MergeChapterData"
-      >合并</el-button
-    >
+
     <el-row
       type="flex"
       style="top: 5%; justify-content: center; flex-wrap: wrap"
@@ -57,9 +55,33 @@ export default {
     }
     this.finddirList();
     this.customMenu(); //测试自定义菜单
+
+    event.$on("MergeFiles", (val) => {
+      this.MergeChapterData();
+    });
   },
   computed: {},
   methods: {
+    open() {
+      this.$confirm("此操作将重写导出总文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "正在重写总数据!",
+          });
+          this.MergeChapterData();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消",
+          });
+        });
+    },
     MergeChapterData() {
       // 拿到所有的章节路径
       let DialogDataListPath = [];
@@ -116,9 +138,12 @@ export default {
           fs.writeFileSync(outaimScenePath, JSON.stringify(data[0]));
           fs.writeFileSync(outaimDialogPath, JSON.stringify(data[1]));
           fs.writeFileSync(outaimlanPath, JSON.stringify(data[2]));
+          this.$message({
+            type: "success",
+            message: "已重写总数据",
+          });
         })
         .catch((err) => {
-          console.log(err, "errrrrr");
           this.$notify({
             title: err,
             message: "错误路径",
@@ -149,7 +174,6 @@ export default {
     },
     ReadDialog() {},
     finddirList() {
-      console.log("测试-mac-2");
       let dirList = [];
       if (this.rootPath !== "") {
         fs.readdir(this.rootPath + PATH_CONFIG.localDataPath, (err, files) => {

@@ -2,8 +2,14 @@
   <div class="main">
     <el-container style="height:100%;weight100%">
       <el-header height="6%" class="top-list">
-        <el-button @click="open" type="primary" icon="el-icon-position"
-          >导出合并</el-button
+        <el-button @click="open" type="success" icon="el-icon-position"
+          >合并操作</el-button
+        >
+        <el-button
+          @click="checkExcelJson"
+          type="warning"
+          icon="el-icon-position"
+          >对比检测</el-button
         >
         <el-button @click="saveResource" plain icon="el-icon-folder-checked"
           >保存</el-button
@@ -34,6 +40,7 @@
 </template>
 
 <script>
+import event from "../../script/tool/event.js";
 import { PATH_CONFIG } from "../../script/config/config.js";
 import BackBtn from "@/components/BackBtn.vue";
 import AsideList from "@/components/AsideList.vue";
@@ -66,47 +73,26 @@ export default {
     console.log("chapter:", chapter);
   },
   methods: {
-    dataCombine() {
-      let rootPath = localStorage.getItem("rootPath");
-      //获取本地数据
-      let sectionListAll = this.$store.getters["section/sectionListGet"];
-      let dialogEditListAll = this.$store.getters["section/dialogEditListGet"];
-      let dialogListArrange =
-        this.$store.getters["section/dialogListArrangeGet"];
-
-      let outaimDialogPath = rootPath + PATH_CONFIG.outaimDialogPath;
-      let outaimScenePath = rootPath + PATH_CONFIG.outaimScenePath;
-      let outaimlanPath = rootPath + PATH_CONFIG.outaimlanPath;
-
-      // 获取外部数据;
-      Promise.all([
-        myfs.readfile(outaimDialogPath),
-        myfs.readfile(outaimScenePath),
-        myfs.readfile(outaimlanPath),
-      ]).then((reslist) => {
-        this.aimDialog = reslist[0];
-        this.aimScene = reslist[1];
-        this.aimlan = reslist[2];
-        console.log(reslist, "list");
-        for (let key in sectionListAll) {
-          this.aimScene[key] = sectionListAll[key];
-        }
-
-        for (let key in dialogEditListAll) {
-          this.aimDialog[key] = dialogEditListAll[key];
-        }
-
-        for (let key in dialogListArrange) {
-          this.aimlan[key] = dialogListArrange[key];
-        }
-
-        //重写外部文件
-        console.log(this.aimDialog, "JSON.stringify(this.aimDialog)");
-        fs.writeFileSync(outaimDialogPath, JSON.stringify(this.aimDialog));
-        fs.writeFileSync(outaimScenePath, JSON.stringify(this.aimScene));
-        fs.writeFileSync(outaimlanPath, JSON.stringify(this.aimlan));
-      });
+    checkExcelJson() {
+      this.$confirm("id不存在于excel的数据将被删除, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "正在对比删除请等待",
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消",
+          });
+        });
     },
+
     open() {
       this.$confirm("此操作将重写导出总文件, 是否继续?", "提示", {
         confirmButtonText: "确定",
@@ -114,6 +100,7 @@ export default {
         type: "warning",
       })
         .then(() => {
+          event.$emit("MergeFiles");
           this.$message({
             type: "success",
             message: "正在重写总数据!",
